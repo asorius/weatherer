@@ -39,11 +39,11 @@ export default function Form() {
         e.preventDefault();
         console.log('submite');
       }}
-      onClick={(e) =>
+      onBlur={(e) => {
         divRef.current &&
-        !divRef.current.contains(e.currentTarget) &&
-        setSuggestionList([])
-      }
+          divRef.current.contains(e.currentTarget) &&
+          setSuggestionList([]);
+      }}
       className='grid place-content-center w-full'>
       <div className='bg-white/90 rounded-lg py-6 px-16 max-w-5xl lg:w-full m-6 relative'>
         <Input
