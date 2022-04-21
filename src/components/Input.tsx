@@ -1,4 +1,4 @@
-import React, { KeyboardEvent } from 'react';
+import React, { KeyboardEvent, SyntheticEvent } from 'react';
 type InputProps = {
   updateFunction: (a: HTMLInputElement) => void;
   onPressedKey: (a: KeyboardEvent<HTMLInputElement>) => void;
@@ -42,10 +42,10 @@ export default function Input({
         value={value}
         autoComplete='off'
         placeholder=' '
-        onChange={(e) => {
+        onChange={(e: SyntheticEvent<HTMLInputElement>) => {
           updateFunction(e.currentTarget);
         }}
-        onKeyDown={(e) => onPressedKey(e)}
+        onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => onPressedKey(e)}
       />
       <label
         htmlFor='place'

@@ -1,4 +1,4 @@
-import React, { KeyboardEvent } from 'react';
+import React, { KeyboardEvent, SyntheticEvent } from 'react';
 import Input from './Input';
 
 export default function Form() {
@@ -6,7 +6,7 @@ export default function Form() {
   const [suggestionList, setSuggestionList] = React.useState([]);
   const [found, setFound] = React.useState(false);
   const [selected, setSelected] = React.useState(false);
-  const parentRef = React.createRef<HTMLUListElement>();
+  const parentRef = React.createRef<HTMLSelectElement>();
   React.useEffect(() => {
     const APICalls = async (
       target: string,
@@ -45,11 +45,11 @@ export default function Form() {
   };
   return (
     <form
-      onSubmit={(e) => {
+      onSubmit={(e: SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('submite');
       }}
-      onBlur={(e) => {
+      onBlur={(e: SyntheticEvent<HTMLFormElement>) => {
         parentRef.current &&
           parentRef.current.contains(e.currentTarget) &&
           setSuggestionList([]);
@@ -60,30 +60,30 @@ export default function Form() {
           onPressedKey={onDownArrow}
           updateFunction={updateFn}
           value={inputValue}></Input>
-        <ul
+        <select
           id='suggestions_list'
-          role='listbox'
+          name='suggestion_list'
           className={`${
             suggestionList.length > 0 ? 'absolute' : 'hidden'
           } top-3/4 left-[5%] lg:left-[10%] p-2 bg-slate-800 rounded-lg text-white before:content-[''] before:absolute before:left-[15%] before:top-0 before:h-4 before:w-4 before:bg-slate-800 before:rotate-45 before:-translate-y-1/2 `}
           ref={parentRef}>
           {suggestionList.map((city, i) => (
-            <li
+            <option
               key={i}
-              data-value={city}
-              role='option'
-              aria-selected={false}
-              onClick={(e) => {
+              value={city}
+              multiple
+              size={suggestionList.length}
+              onClick={(e: SyntheticEvent<HTMLOptionElement>) => {
                 e.preventDefault();
-                setValue(e.currentTarget.dataset.value || '');
+                setValue(e.currentTarget.value);
                 setSuggestionList([]);
                 setFound(true);
               }}
               className='p-2 cursor-pointer hover:text-mainBlue'>
               {city}
-            </li>
+            </option>
           ))}
-        </ul>
+        </select>
       </div>
     </form>
   );
