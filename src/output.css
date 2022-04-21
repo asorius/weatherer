@@ -450,11 +450,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .relative {
   position: relative;
 }
-.top-\[65\%\] {
-  top: 65%;
+.top-3\/4 {
+  top: 75%;
 }
-.left-0 {
-  left: 0px;
+.left-\[5\%\] {
+  left: 5%;
 }
 .bottom-full {
   bottom: 100%;
@@ -482,11 +482,17 @@ Ensure the default browser behavior of the `hidden` attribute.
 .grid {
   display: grid;
 }
+.hidden {
+  display: none;
+}
 .h-screen {
   height: 100vh;
 }
 .h-96 {
   height: 24rem;
+}
+.max-h-52 {
+  max-height: 13rem;
 }
 .w-screen {
   width: 100vw;
@@ -494,8 +500,8 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-full {
   width: 100%;
 }
-.max-w-2xl {
-  max-width: 42rem;
+.max-w-5xl {
+  max-width: 64rem;
 }
 .origin-0 {
   transform-origin: 0%;
@@ -503,6 +509,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .rotate-45 {
   --tw-rotate: 45deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.cursor-pointer {
+  cursor: pointer;
 }
 .cursor-text {
   cursor: text;
@@ -526,8 +535,8 @@ Ensure the default browser behavior of the `hidden` attribute.
 .bg-white\/90 {
   background-color: rgb(255 255 255 / 0.9);
 }
-.bg-black\/90 {
-  background-color: rgb(0 0 0 / 0.9);
+.bg-black\/80 {
+  background-color: rgb(0 0 0 / 0.8);
 }
 .bg-transparent {
   background-color: transparent;
@@ -557,6 +566,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .bg-no-repeat {
   background-repeat: no-repeat;
+}
+.p-2 {
+  padding: 0.5rem;
 }
 .p-1 {
   padding: 0.25rem;
@@ -616,12 +628,25 @@ input:focus-within ~ label {
   border-color: rgb(34 211 238 / var(--tw-border-opacity));
 }
 
+.hover\:text-mainBlue:hover {
+  --tw-text-opacity: 1;
+  color: rgb(34 211 238 / var(--tw-text-opacity));
+}
+
 .focus\:outline-none:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
 }
 
 @media (min-width: 1024px) {
+
+  .lg\:left-\[10\%\] {
+    left: 10%;
+  }
+
+  .lg\:w-full {
+    width: 100%;
+  }
 
   .lg\:text-8xl {
     font-size: 6rem;

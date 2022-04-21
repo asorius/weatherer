@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { KeyboardEvent } from 'react';
 type InputProps = {
-  updateFunction: (a: string) => void;
+  updateFunction: (a: HTMLInputElement) => void;
+  onPressedKey: (a: KeyboardEvent<HTMLInputElement>) => void;
   arrow?: boolean;
   value: string;
 };
 export default function Input({
   updateFunction,
   arrow = false,
+  onPressedKey,
   value,
 }: InputProps) {
   const input = React.createRef<HTMLInputElement>();
@@ -41,8 +43,9 @@ export default function Input({
         autoComplete='off'
         placeholder=' '
         onChange={(e) => {
-          updateFunction(e.currentTarget.value);
+          updateFunction(e.currentTarget);
         }}
+        onKeyDown={(e) => onPressedKey(e)}
       />
       <label
         htmlFor='place'

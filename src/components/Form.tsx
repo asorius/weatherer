@@ -1,19 +1,23 @@
-import React from 'react';
+import React, { KeyboardEvent } from 'react';
 import Input from './Input';
 
 export default function Form() {
   const [inputValue, setValue] = React.useState('');
   const [suggestionList, setSuggestionList] = React.useState([]);
   const [found, setFound] = React.useState(false);
-  const divRef = React.createRef<HTMLDivElement>();
+  const [selected, setSelected] = React.useState(false);
+  const parentRef = React.createRef<HTMLUListElement>();
   React.useEffect(() => {
     const APICalls = async (
       target: string,
       key = process.env.REACT_APP_WEATHER_KEY
     ) => {
       if (target.length < 3 || found) {
-        inputValue.length === 0 && setFound(false);
+        if (inputValue.length === 0) {
+          setFound(false);
+        }
         setSuggestionList([]);
+
         return;
       }
       try {
@@ -32,7 +36,13 @@ export default function Form() {
     };
     APICalls(inputValue);
   }, [inputValue, found]);
-
+  const updateFn = (currentTarget: HTMLInputElement) => {
+    setValue(currentTarget.value);
+    console.log();
+  };
+  const onDownArrow = (key: KeyboardEvent<HTMLInputElement>) => {
+    key.code === 'ArrowDown' && parentRef.current && parentRef.current.focus();
+  };
   return (
     <form
       onSubmit={(e) => {
@@ -40,36 +50,40 @@ export default function Form() {
         console.log('submite');
       }}
       onBlur={(e) => {
-        divRef.current &&
-          divRef.current.contains(e.currentTarget) &&
+        parentRef.current &&
+          parentRef.current.contains(e.currentTarget) &&
           setSuggestionList([]);
       }}
       className='grid place-content-center w-full'>
       <div className='bg-white/90 rounded-lg py-6 px-16 max-w-5xl lg:w-full m-6 relative'>
         <Input
-          updateFunction={(value) => setValue(value)}
+          onPressedKey={onDownArrow}
+          updateFunction={updateFn}
           value={inputValue}></Input>
-        <div
+        <ul
+          id='suggestions_list'
+          role='listbox'
           className={`${
             suggestionList.length > 0 ? 'absolute' : 'hidden'
-          } top-3/4 left-[5%] lg:left-[10%] p-2 bg-black/80 rounded-lg text-white max-h-52`}
-          ref={divRef}>
+          } top-3/4 left-[5%] lg:left-[10%] p-2 bg-slate-800 rounded-lg text-white before:content-[''] before:absolute before:left-[15%] before:top-0 before:h-4 before:w-4 before:bg-slate-800 before:rotate-45 before:-translate-y-1/2 `}
+          ref={parentRef}>
           {suggestionList.map((city, i) => (
-            <option
+            <li
               key={i}
-              value={city}
-              className='p-2 cursor-pointer hover:text-mainBlue'
+              data-value={city}
+              role='option'
+              aria-selected={false}
               onClick={(e) => {
                 e.preventDefault();
-                setValue(e.currentTarget.value);
+                setValue(e.currentTarget.dataset.value || '');
                 setSuggestionList([]);
                 setFound(true);
-                // console.log(e.currentTarget.value);
-              }}>
+              }}
+              className='p-2 cursor-pointer hover:text-mainBlue'>
               {city}
-            </option>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </form>
   );
