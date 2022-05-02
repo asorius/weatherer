@@ -3,15 +3,20 @@ type InputProps = {
   updateFunction: (a: HTMLInputElement) => void;
   onPressedKey: (a: KeyboardEvent<HTMLInputElement>) => void;
   arrow?: boolean;
+  isFocused?: boolean;
   value: string;
 };
 export default function Input({
   updateFunction,
-  arrow = false,
   onPressedKey,
   value,
+  arrow = false,
+  isFocused = false,
 }: InputProps) {
   const input = React.createRef<HTMLInputElement>();
+  React.useEffect(() => {
+    isFocused && input.current?.focus();
+  }, [isFocused, input]);
   return (
     <div className='relative z-1 my-4 border-b-2 border-slate-400 focus-within:border-mainBlue'>
       <svg

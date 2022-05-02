@@ -1,12 +1,13 @@
-import React, { KeyboardEvent, SyntheticEvent } from 'react';
+import React, { KeyboardEvent, SyntheticEvent, FormEvent } from 'react';
 import Input from './Input';
 
 export default function Form() {
-  const [inputValue, setValue] = React.useState('');
+  const [inputValue, setInputValue] = React.useState('');
   const [suggestionList, setSuggestionList] = React.useState([]);
   const [found, setFound] = React.useState(false);
   const [selected, setSelected] = React.useState(false);
-  const parentRef = React.createRef<HTMLSelectElement>();
+  const [inputFocus, setInputFocus] = React.useState(false);
+  const selectElement = React.createRef<HTMLSelectElement>();
   React.useEffect(() => {
     const APICalls = async (
       target: string,
@@ -37,45 +38,50 @@ export default function Form() {
     APICalls(inputValue);
   }, [inputValue, found]);
   const updateFn = (currentTarget: HTMLInputElement) => {
-    setValue(currentTarget.value);
+    setInputValue(currentTarget.value);
     console.log();
   };
-  const onDownArrow = (key: KeyboardEvent<HTMLInputElement>) => {
-    key.code === 'ArrowDown' && parentRef.current && parentRef.current.focus();
+  const onKeyboardAction = (key: KeyboardEvent<HTMLInputElement>) => {
+    key.code === 'ArrowDown' && selectElement.current?.focus();
+    key.code === 'Escape' && setSuggestionList([]);
   };
   return (
     <form
-      onSubmit={(e: SyntheticEvent<HTMLFormElement>) => {
+      onSubmit={(e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('submite');
       }}
-      onBlur={(e: SyntheticEvent<HTMLFormElement>) => {
-        parentRef.current &&
-          parentRef.current.contains(e.currentTarget) &&
+      onBlur={(e: FormEvent<HTMLFormElement>) => {
+        selectElement.current &&
+          selectElement.current.contains(e.currentTarget) &&
           setSuggestionList([]);
       }}
       className='grid place-content-center w-full'>
       <div className='bg-white/90 rounded-lg py-6 px-16 max-w-5xl lg:w-full m-6 relative'>
         <Input
-          onPressedKey={onDownArrow}
+          onPressedKey={onKeyboardAction}
           updateFunction={updateFn}
+          isFocused={inputFocus}
           value={inputValue}></Input>
         <select
           id='suggestions_list'
           name='suggestion_list'
+          multiple={true}
+          size={suggestionList.length}
+          onKeyDown={(e: KeyboardEvent<HTMLInputElement>) =>
+            onKeyboardAction(e)
+          }
           className={`${
             suggestionList.length > 0 ? 'absolute' : 'hidden'
           } top-3/4 left-[5%] lg:left-[10%] p-2 bg-slate-800 rounded-lg text-white before:content-[''] before:absolute before:left-[15%] before:top-0 before:h-4 before:w-4 before:bg-slate-800 before:rotate-45 before:-translate-y-1/2 `}
-          ref={parentRef}>
+          ref={selectElement}>
           {suggestionList.map((city, i) => (
             <option
               key={i}
               value={city}
-              multiple
-              size={suggestionList.length}
               onClick={(e: SyntheticEvent<HTMLOptionElement>) => {
                 e.preventDefault();
-                setValue(e.currentTarget.value);
+                setInputValue(e.currentTarget.value);
                 setSuggestionList([]);
                 setFound(true);
               }}
