@@ -11,27 +11,25 @@ export default function Form() {
   React.useEffect(() => {
     const APICalls = async (
       target: string,
-      key = process.env.REACT_APP_WEATHER_KEY
+      weatherKey = process.env.REACT_APP_WEATHER_KEY,
+      locationKey = process.env.REACT_APP_MAPBOX_KEY
     ) => {
       if (target.length < 3 || found) {
-        if (inputValue.length === 0) {
+        if (target.length === 0) {
           setFound(false);
         }
         setSuggestionList([]);
-
         return;
       }
       try {
         const mapboxResponse = await fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${target}.json?access_token=${process.env.REACT_APP_MAPBOX_KEY}&cachebuster=1625641871908&autocomplete=true&types=place`
+          `https://api.mapbox.com/geocoding/v5/mapbox.places/${target}.json?access_token=${locationKey}&cachebuster=1625641871908&autocomplete=true&types=place`
         );
         const js = await mapboxResponse.json();
-        // console.log({ js });
         const list = js.features.map((el: any) => el.place_name);
-        list.find((el: string) => el === inputValue) || setSuggestionList(list);
+        list.find((el: string) => el === target) || setSuggestionList(list);
 
         // console.log({ current, forecast });
-        console.log(inputValue);
       } catch (e) {
         return { error: true };
       }
