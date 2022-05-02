@@ -53,7 +53,7 @@ export default function Form() {
   };
   return (
     <form
-      id='input_form'
+      id='input-form'
       onSubmit={(e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         handleSubmit();
@@ -71,9 +71,9 @@ export default function Form() {
           isFocused={inputFocus}
           value={inputValue}></Input>
         <select
-          id='suggestions_list'
-          name='suggestion_list'
-          form='input_form'
+          id='suggestions-list'
+          name='suggestion-list'
+          form='input-form'
           size={suggestionList.length}
           value={selected}
           onChange={(e: SyntheticEvent<HTMLOptionElement>) => {
