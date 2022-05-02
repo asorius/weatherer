@@ -5,7 +5,7 @@ export default function Form() {
   const [inputValue, setInputValue] = React.useState('');
   const [suggestionList, setSuggestionList] = React.useState([]);
   const [found, setFound] = React.useState(false);
-  const [selected, setSelected] = React.useState(false);
+  const [selected, setSelected] = React.useState('');
   const [inputFocus, setInputFocus] = React.useState(false);
   const selectElement = React.createRef<HTMLSelectElement>();
   React.useEffect(() => {
@@ -26,11 +26,12 @@ export default function Form() {
           `https://api.mapbox.com/geocoding/v5/mapbox.places/${target}.json?access_token=${process.env.REACT_APP_MAPBOX_KEY}&cachebuster=1625641871908&autocomplete=true&types=place`
         );
         const js = await mapboxResponse.json();
-        console.log({ js });
+        // console.log({ js });
         const list = js.features.map((el: any) => el.place_name);
         list.find((el: string) => el === inputValue) || setSuggestionList(list);
 
         // console.log({ current, forecast });
+        console.log(inputValue);
       } catch (e) {
         return { error: true };
       }
@@ -45,11 +46,19 @@ export default function Form() {
     key.code === 'ArrowDown' && selectElement.current?.focus();
     key.code === 'Escape' && setSuggestionList([]);
   };
+  const handleSubmit = () => {
+    console.log('Submitting value');
+    console.log(selected);
+    setInputValue('');
+    setSuggestionList([]);
+    setFound(true);
+  };
   return (
     <form
+      id='input_form'
       onSubmit={(e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('submite');
+        handleSubmit();
       }}
       onBlur={(e: FormEvent<HTMLFormElement>) => {
         selectElement.current &&
@@ -66,14 +75,21 @@ export default function Form() {
         <select
           id='suggestions_list'
           name='suggestion_list'
-          multiple={true}
+          form='input_form'
           size={suggestionList.length}
-          onKeyDown={(e: KeyboardEvent<HTMLInputElement>) =>
-            onKeyboardAction(e)
-          }
+          value={selected}
+          onChange={(e: SyntheticEvent<HTMLOptionElement>) => {
+            setSelected(e.currentTarget.value);
+          }}
+          onKeyDown={(key: KeyboardEvent<HTMLInputElement>) => {
+            key.code === 'Enter' && handleSubmit();
+            key.code === 'Escape' &&
+              setInputFocus(true) &&
+              setSuggestionList([]);
+          }}
           className={`${
             suggestionList.length > 0 ? 'absolute' : 'hidden'
-          } top-3/4 left-[5%] lg:left-[10%] p-2 bg-slate-800 rounded-lg text-white before:content-[''] before:absolute before:left-[15%] before:top-0 before:h-4 before:w-4 before:bg-slate-800 before:rotate-45 before:-translate-y-1/2 `}
+          } transition-all ease-out duration-700 top-3/4 left-[5%] lg:left-[10%] p-2 bg-slate-800 rounded-lg text-white before:content-[''] before:absolute before:left-[15%] before:top-0 before:h-4 before:w-4 before:bg-slate-800 before:rotate-45 before:-translate-y-1/2 `}
           ref={selectElement}>
           {suggestionList.map((city, i) => (
             <option
@@ -81,9 +97,8 @@ export default function Form() {
               value={city}
               onClick={(e: SyntheticEvent<HTMLOptionElement>) => {
                 e.preventDefault();
-                setInputValue(e.currentTarget.value);
-                setSuggestionList([]);
-                setFound(true);
+                setSelected(e.currentTarget.value);
+                handleSubmit();
               }}
               className='p-2 cursor-pointer hover:text-mainBlue'>
               {city}
