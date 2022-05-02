@@ -1,5 +1,23 @@
-import React, { KeyboardEvent, SyntheticEvent, FormEvent } from 'react';
+import React, {
+  KeyboardEvent,
+  SyntheticEvent,
+  FormEvent,
+  useContext,
+} from 'react';
+import { Ctx } from '../context/index';
 import Input from './Input';
+const locationAPI = async (target: string, key: string | undefined) => {
+  try {
+    const mapboxResponse = await fetch(
+      `https://api.mapbox.com/geocoding/v5/mapbox.places/${target}.json?access_token=${key}&cachebuster=1625641871908&autocomplete=true&types=place`
+    );
+    const js = await mapboxResponse.json();
+    const list = js.features.map((el: any) => el.place_name);
+    return list;
+  } catch (e) {
+    return e;
+  }
+};
 
 export default function Form() {
   const [inputValue, setInputValue] = React.useState('');
@@ -11,7 +29,7 @@ export default function Form() {
   React.useEffect(() => {
     const APICalls = async (
       target: string,
-      weatherKey = process.env.REACT_APP_WEATHER_KEY,
+
       locationKey = process.env.REACT_APP_MAPBOX_KEY
     ) => {
       if (target.length < 3 || found) {
@@ -19,34 +37,39 @@ export default function Form() {
           setFound(false);
         }
         setSuggestionList([]);
+
         return;
       }
       try {
-        const mapboxResponse = await fetch(
-          `https://api.mapbox.com/geocoding/v5/mapbox.places/${target}.json?access_token=${locationKey}&cachebuster=1625641871908&autocomplete=true&types=place`
-        );
-        const js = await mapboxResponse.json();
-        const list = js.features.map((el: any) => el.place_name);
-        list.find((el: string) => el === target) || setSuggestionList(list);
-
-        // console.log({ current, forecast });
+        const suggestions = await locationAPI(target, locationKey);
+        suggestions.find((el: string) => el === target) ||
+          setSuggestionList(suggestions);
       } catch (e) {
         return { error: true };
       }
     };
     APICalls(inputValue);
   }, [inputValue, found]);
+  const context = useContext(Ctx);
+  React.useEffect(() => {
+    const APICalls = async () => {
+      selected &&
+        context?.dispatch({
+          type: 'get-weather',
+          payload: { target: selected },
+        });
+      console.log('action submitted');
+    };
+    APICalls();
+  }, [selected]);
   const updateFn = (currentTarget: HTMLInputElement) => {
     setInputValue(currentTarget.value);
-    console.log();
   };
   const onKeyboardAction = (key: KeyboardEvent<HTMLInputElement>) => {
     key.code === 'ArrowDown' && selectElement.current?.focus();
     key.code === 'Escape' && setSuggestionList([]);
   };
   const handleSubmit = () => {
-    console.log('Submitting value');
-    console.log(selected);
     setInputValue('');
     setSuggestionList([]);
     setFound(true);
