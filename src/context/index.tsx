@@ -8,40 +8,20 @@ interface State {
 }
 interface Action {
   type: string;
-  payload: { target: string };
+  payload?: { current: any; forecast: any };
 }
 const Ctx = createContext<
   { state: State; dispatch: Dispatch<Action> } | undefined
 >(undefined);
-const weatherAPI = async (target: string, key: string | undefined) => {
-  try {
-    console.log('Getting data for : ' + target);
-    const responseCurrent = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${target}&APPID=${key}&units=metric`
-    );
-    const responseForecast = await fetch(
-      `https://api.openweathermap.org/data/2.5/forecast?q=${target}&APPID=${key}&units=metric`
-    );
-    const current = await responseCurrent.json();
-    const forecast = await responseForecast.json();
-    return { current, forecast };
-  } catch (e) {
-    return { error: true };
-  }
-};
+
 const reducerFn = (state: State, action: Action) => {
   switch (action.type) {
     case 'loading': {
       return { ...state, loading: true };
     }
     case 'get-weather': {
-      const weatherKey = process.env.REACT_APP_WEATHER_KEY;
-      const target = action.payload.target;
-      const data = weatherAPI(target, weatherKey).then((data) => {
-        console.log(data.current?.name);
-        return data;
-      });
-      return { ...state, loading: false, data: data };
+      const data = action.payload;
+      return { ...state, loading: false, data };
     }
     default: {
       return state;

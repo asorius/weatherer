@@ -1,23 +1,24 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { Ctx } from '../context';
 export default function Current() {
   const context = useContext(Ctx);
-  const data = context?.state.data;
-  // const name = data?.name,
-  //   temp = data?.main.temp,
-  //   weather = data?.weather[0].description,
-  //   country = data?.sys.country;
+  const data = context?.state.data?.current;
+  const name = data?.name,
+    temp = data?.main.temp,
+    weather = data?.weather[0].description,
+    country = data?.sys.country;
   console.log(data);
+  const loading = context?.state.loading ? <div>Loading...</div> : null;
+
   return (
-    <div className='row'>
-      <div className='data_container container'>
+    <div className=''>
+      <div className=''>
         <h4>
-          {/* Current Weather in {name},{country}. */}
-          olljsdf
+          Current Weather in {name},{country}.
         </h4>
-        <div className='details'>
+        <div className=''>
           <h5>
-            {/* {weather} with temperature of {Math.round(temp)} &#8451;. */}
+            {weather} with temperature of {Math.round(temp)} &#8451;.
           </h5>
         </div>
       </div>

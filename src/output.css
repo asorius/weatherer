@@ -605,8 +605,19 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-black\/40 {
   color: rgb(0 0 0 / 0.4);
 }
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.duration-700 {
+  transition-duration: 700ms;
+}
 .duration-300 {
   transition-duration: 300ms;
+}
+.ease-out {
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
 
 input:focus-within ~ label, input:not(:placeholder-shown) ~ label {
