@@ -69,7 +69,6 @@ export default function Form() {
       (obj: LocationData) => obj.name === name
     ) || { name: '', coords: [0, 0] };
     setSelected(name);
-    console.log(selectedLocationData);
     selectedLocationData && setCoords(selectedLocationData.coords);
   };
   const handleSubmit = () => {
@@ -81,7 +80,6 @@ export default function Form() {
     const weatherKey = process.env.REACT_APP_WEATHER_KEY;
     const weatherAPI = async (target: string, key: string | undefined) => {
       try {
-        console.log('Getting data for : ' + target);
         const [lon, lat] = coords;
         const responseCurrent = await fetch(
           `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${key}&units=metric`
@@ -102,7 +100,7 @@ export default function Form() {
     };
     setTimeout(() => {
       selected && weatherAPI(selected, weatherKey);
-    }, 500);
+    }, 1500);
   };
 
   return (
