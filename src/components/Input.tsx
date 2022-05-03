@@ -14,9 +14,9 @@ export default function Input({
   isFocused = false,
 }: InputProps) {
   const input = React.createRef<HTMLInputElement>();
-  React.useEffect(() => {
-    isFocused && input.current?.focus();
-  }, [isFocused, input]);
+  // React.useEffect(() => {
+  //   isFocused ? input.current?.focus() : input.current?.blur();
+  // }, [isFocused]);
   return (
     <div className='relative z-1 my-4 border-b-2 border-slate-400 focus-within:border-mainBlue'>
       <svg

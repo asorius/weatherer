@@ -58,10 +58,11 @@ export default function Form() {
     setInputValue(currentTarget.value);
   };
   const onKeyboardAction = (key: KeyboardEvent<HTMLInputElement>) => {
-    key.code === 'ArrowDown' &&
-      selectElement.current?.focus() &&
-      setSelected(selectElement.current?.children[0].innerHTML);
-    key.code === 'Escape' && setSuggestionList([]);
+    // key.code === 'ArrowDown' &&
+    //   console.log('arrowdown') &&
+    //   selectElement.current?.focus() &&
+    //   selectedController(selectElement.current?.children[0].innerHTML);
+    // key.code === 'Escape' && setInputFocus(true) && setSuggestionList([]);
   };
   const selectedController = (name: string) => {
     const selectedLocationData: LocationData = suggestionList.find(
