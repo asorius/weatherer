@@ -8,9 +8,13 @@ function App() {
     <WithContext>
       <div className='bg-hero-svg h-screen w-screen bg-no-repeat bg-cover bg-center font-poppins'>
         <div className='container mx-auto '>
-          <Header />
-          <Form />
-          <Current />
+          <div id='this-shrinks-up'>
+            <Header />
+            <Form />
+          </div>
+          <div id='this-grows-in'>
+            <Current />
+          </div>
         </div>
       </div>
     </WithContext>
