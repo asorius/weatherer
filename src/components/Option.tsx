@@ -1,19 +1,27 @@
 import React from 'react';
 
+interface PropTypes {
+  city: string;
+  actionFn: (e: React.SyntheticEvent<HTMLOptionElement>) => void;
+  isSelected: boolean;
+}
 export default function Option({
   city,
   actionFn,
-}: {
-  city: string;
-  actionFn: (e: React.SyntheticEvent<HTMLOptionElement>) => void;
-}) {
+  isSelected = false,
+}: PropTypes) {
   return (
-    <option
+    <li
       tabIndex={1}
       value={city}
       onClick={(e: React.SyntheticEvent<HTMLOptionElement>) => actionFn(e)}
-      className='p-2 cursor-pointer hover:text-mainBlue'>
-      {city}
-    </option>
+      role='presentation'
+      className={`p-2 cursor-pointer hover:text-mainBlue ${
+        isSelected && 'bg-white'
+      }`}>
+      <div role='option' aria-selected={isSelected}>
+        {city}
+      </div>
+    </li>
   );
 }

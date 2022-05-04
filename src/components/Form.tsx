@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import { Ctx } from '../context/index';
 import Input from './Input';
-import Option from './Option';
+import IterableUL from './IterableUL';
 interface LocationData {
   name: string;
   coords: number[];
@@ -31,7 +31,6 @@ export default function Form() {
   const [inputValue, setInputValue] = React.useState('');
   const [suggestionList, setSuggestionList] = React.useState([]);
   const [selected, setSelected] = React.useState('');
-  const [inputFocus, setInputFocus] = React.useState(false);
   const [coords, setCoords] = React.useState([0, 0]);
   const selectElement = React.createRef<HTMLSelectElement>();
   const context = useContext(Ctx);
@@ -58,11 +57,7 @@ export default function Form() {
     setInputValue(currentTarget.value);
   };
   const onKeyboardAction = (key: KeyboardEvent<HTMLInputElement>) => {
-    // key.code === 'ArrowDown' &&
-    //   console.log('arrowdown') &&
-    //   selectElement.current?.focus() &&
-    //   selectedController(selectElement.current?.children[0].innerHTML);
-    // key.code === 'Escape' && setInputFocus(true) && setSuggestionList([]);
+    // key.code === 'ArrowDown' && selectElement.current?.focus();
   };
   const selectedController = (name: string) => {
     const selectedLocationData: LocationData = suggestionList.find(
@@ -78,6 +73,7 @@ export default function Form() {
     setInputValue('');
     setSuggestionList([]);
     const weatherKey = process.env.REACT_APP_WEATHER_KEY;
+    selectedController(selected);
     const weatherAPI = async (target: string, key: string | undefined) => {
       try {
         const [lon, lat] = coords;
@@ -120,39 +116,13 @@ export default function Form() {
         <Input
           onPressedKey={onKeyboardAction}
           updateFunction={updateFn}
-          isFocused={inputFocus}
           value={inputValue}></Input>
-        <select
-          id='suggestions-list'
-          name='suggestion-list'
-          form='input-form'
-          size={suggestionList.length}
-          value={selected}
-          onChange={(e: SyntheticEvent<HTMLOptionElement>) => {
-            selectedController(e.currentTarget.value);
-          }}
-          onKeyDown={(key: KeyboardEvent<HTMLInputElement>) => {
-            key.code === 'Enter' && handleSubmit();
-            key.code === 'Escape' &&
-              setInputFocus(true) &&
-              setSuggestionList([]);
-          }}
-          className={`${
-            suggestionList.length > 0 ? 'absolute' : 'hidden'
-          } transition-all ease-out duration-700 top-3/4 left-[5%] lg:left-[10%] p-2 bg-slate-800 rounded-lg text-white before:content-[''] before:absolute before:left-[15%] before:top-0 before:h-4 before:w-4 before:bg-slate-800 before:rotate-45 before:-translate-y-1/2 `}
-          ref={selectElement}>
-          {suggestionList.map((cityData: LocationData, i) => (
-            <Option
-              key={i}
-              city={cityData.name}
-              actionFn={(e) => {
-                e.preventDefault();
-                selectedController(e.currentTarget.value);
-                handleSubmit();
-              }}
-            />
-          ))}
-        </select>
+        <IterableUL
+          list={suggestionList}
+          submit={handleSubmit}
+          listController={() => {
+            setSuggestionList([]);
+          }}></IterableUL>
       </div>
     </form>
   );

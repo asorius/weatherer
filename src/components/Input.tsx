@@ -1,4 +1,5 @@
 import React, { KeyboardEvent, SyntheticEvent } from 'react';
+import { Ctx } from '../context';
 type InputProps = {
   updateFunction: (a: HTMLInputElement) => void;
   onPressedKey: (a: KeyboardEvent<HTMLInputElement>) => void;
@@ -14,9 +15,7 @@ export default function Input({
   isFocused = false,
 }: InputProps) {
   const input = React.createRef<HTMLInputElement>();
-  // React.useEffect(() => {
-  //   isFocused ? input.current?.focus() : input.current?.blur();
-  // }, [isFocused]);
+  const context = React.useContext(Ctx);
   return (
     <div className='relative z-1 my-4 border-b-2 border-slate-400 focus-within:border-mainBlue'>
       <svg
@@ -50,7 +49,10 @@ export default function Input({
         onChange={(e: SyntheticEvent<HTMLInputElement>) => {
           updateFunction(e.currentTarget);
         }}
-        onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => onPressedKey(e)}
+        onKeyDown={(key: KeyboardEvent<HTMLInputElement>) =>
+          key.code === 'ArrowDown' &&
+          context?.dispatch({ type: 'input-focus-change' })
+        }
       />
       <label
         htmlFor='place'
