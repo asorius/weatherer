@@ -1,14 +1,29 @@
 import React, { createContext, Dispatch, useReducer } from 'react';
 
-const initialState = { location: '', loading: false, data: null };
+const initialState = {
+  inputFocus: false,
+  selectionValue: '',
+  coords: [0, 0],
+  location: '',
+  loading: false,
+  data: null,
+};
 interface State {
+  inputFocus: boolean;
+  selectionValue: string;
+  coords: number[];
   location: string;
   loading: boolean;
   data?: any | null;
 }
 interface Action {
   type: string;
-  payload?: { current: any; forecast: any };
+  payload?: {
+    current?: any;
+    forecast?: any;
+    selectionValue?: string;
+    coords?: number[];
+  };
 }
 const Ctx = createContext<
   { state: State; dispatch: Dispatch<Action> } | undefined
@@ -16,6 +31,15 @@ const Ctx = createContext<
 
 const reducerFn = (state: State, action: Action) => {
   switch (action.type) {
+    case 'input-focus-change': {
+      return { ...state, inputFocus: !state.inputFocus };
+    }
+
+    case 'target-selection': {
+      const value = action.payload?.selectionValue || '';
+      const coords = action.payload?.coords || [0, 0];
+      return { ...state, selectionValue: value, coords };
+    }
     case 'loading': {
       return { ...state, loading: true };
     }
