@@ -1,9 +1,4 @@
-import React, {
-  KeyboardEvent,
-  SyntheticEvent,
-  FormEvent,
-  useContext,
-} from 'react';
+import React, { KeyboardEvent, FormEvent, useContext } from 'react';
 import { Ctx } from '../context/index';
 import Input from './Input';
 import IterableUL from './IterableUL';
@@ -56,24 +51,25 @@ export default function Form() {
   const updateFn = (currentTarget: HTMLInputElement) => {
     setInputValue(currentTarget.value);
   };
-  const onKeyboardAction = (key: KeyboardEvent<HTMLInputElement>) => {
-    // key.code === 'ArrowDown' && selectElement.current?.focus();
-  };
-  const selectedController = (name: string) => {
-    const selectedLocationData: LocationData = suggestionList.find(
-      (obj: LocationData) => obj.name === name
-    ) || { name: '', coords: [0, 0] };
-    setSelected(name);
-    selectedLocationData && setCoords(selectedLocationData.coords);
+
+  const selectedController = (name?: string) => {
+    if (name) {
+      const selectedLocationData: LocationData = suggestionList.find(
+        (obj: LocationData) => obj.name === name
+      ) || { name: '', coords: [0, 0] };
+      setSelected(name);
+      selectedLocationData && setCoords(selectedLocationData.coords);
+    } else {
+      setSuggestionList([]);
+    }
   };
   const handleSubmit = () => {
     context?.dispatch({
       type: 'loading',
     });
     setInputValue('');
-    setSuggestionList([]);
-    const weatherKey = process.env.REACT_APP_WEATHER_KEY;
     selectedController(selected);
+    const weatherKey = process.env.REACT_APP_WEATHER_KEY;
     const weatherAPI = async (target: string, key: string | undefined) => {
       try {
         const [lon, lat] = coords;
@@ -96,7 +92,7 @@ export default function Form() {
     };
     setTimeout(() => {
       selected && weatherAPI(selected, weatherKey);
-    }, 1500);
+    }, 500);
   };
 
   return (
@@ -113,16 +109,11 @@ export default function Form() {
       }}
       className='grid place-content-center w-full'>
       <div className='bg-white/90 rounded-lg py-6 px-16 max-w-5xl lg:w-full m-6 relative'>
-        <Input
-          onPressedKey={onKeyboardAction}
-          updateFunction={updateFn}
-          value={inputValue}></Input>
+        <Input updateFunction={updateFn} value={inputValue}></Input>
         <IterableUL
           list={suggestionList}
           submit={handleSubmit}
-          listController={() => {
-            setSuggestionList([]);
-          }}></IterableUL>
+          listController={selectedController}></IterableUL>
       </div>
     </form>
   );

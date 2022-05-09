@@ -2,15 +2,20 @@ import React from 'react';
 import { Ctx } from '../context';
 import Option from './Option';
 interface Props {
-  list: string[];
-  listController: () => void;
+  list: { name: string; coords: number[] }[];
+  listController: (k?: string) => void;
   submit: () => void;
 }
 export default function IterableUL({ list, submit, listController }: Props) {
   const [currentOption, setOption] = React.useState(0);
   const context = React.useContext(Ctx);
+  React.useEffect(() => {
+    const focusValue = context?.state.inputFocus;
+    focusValue && setOption(0);
+  }, [context?.state.inputFocus]);
   const onKeyboardAction = (key: React.KeyboardEvent<HTMLInputElement>) => {
     const optionCalculator = (actionType: number) => {
+      listController(list[currentOption].name);
       const nextValue = currentOption + actionType;
       const inc = () =>
         nextValue < length ? setOption(nextValue) : setOption(0);
@@ -31,15 +36,13 @@ export default function IterableUL({ list, submit, listController }: Props) {
       }
       case 'Enter': {
         console.log('enter ');
-
         submit();
         return;
       }
       case 'Escape': {
         console.log('esc ');
-
-        context?.dispatch({ type: 'input-focus-change' });
         listController();
+        context?.dispatch({ type: 'input-focus-change' });
         return;
       }
 

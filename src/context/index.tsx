@@ -36,6 +36,7 @@ const reducerFn = (state: State, action: Action) => {
     }
 
     case 'target-selection': {
+      console.log(action.payload);
       const value = action.payload?.selectionValue || '';
       const coords = action.payload?.coords || [0, 0];
       return { ...state, selectionValue: value, coords };

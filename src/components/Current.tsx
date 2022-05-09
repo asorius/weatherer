@@ -9,7 +9,6 @@ export default function Current() {
     weatherDescription = data?.weather[0].description,
     country = data?.sys.country,
     icon = data?.weather[0].icon;
-  console.log(data);
   const loading = (
     <div className='flex items-center justify-center '>
       <div className='w-24 h-24 border-l-2  rounded-full animate-spin border-mainBlue'></div>
