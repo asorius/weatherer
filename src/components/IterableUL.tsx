@@ -10,17 +10,23 @@ export default function IterableUL({ list, submit, listController }: Props) {
   const [currentOption, setOption] = React.useState(0);
   const context = React.useContext(Ctx);
   const onKeyboardAction = (key: React.KeyboardEvent<HTMLInputElement>) => {
+    const optionCalculator = (actionType: number) => {
+      const nextValue = currentOption + actionType;
+      const inc = () =>
+        nextValue < length ? setOption(nextValue) : setOption(0);
+      const dec = () =>
+        nextValue >= 0 ? setOption(nextValue) : setOption(length - 1);
+
+      actionType > 0 ? inc() : dec();
+    };
+    const length = list.length;
     switch (key.code) {
       case 'ArrowDown': {
-        console.log('down ');
-
-        setOption(currentOption + 1);
+        optionCalculator(1);
         return;
       }
       case 'ArrowUp': {
-        console.log('up');
-
-        setOption(currentOption - 1);
+        optionCalculator(-1);
         return;
       }
       case 'Enter': {
