@@ -52,7 +52,7 @@ export default function Form() {
     setInputValue(currentTarget.value);
   };
 
-  const selectedController = (name?: string) => {
+  const selectionController = (name?: string) => {
     if (name) {
       const selectedLocationData: LocationData = suggestionList.find(
         (obj: LocationData) => obj.name === name
@@ -68,7 +68,7 @@ export default function Form() {
       type: 'loading',
     });
     setInputValue('');
-    selectedController(selected);
+    selectionController(selected);
     const weatherKey = process.env.REACT_APP_WEATHER_KEY;
     const weatherAPI = async (target: string, key: string | undefined) => {
       try {
@@ -113,7 +113,7 @@ export default function Form() {
         <IterableUL
           list={suggestionList}
           submit={handleSubmit}
-          listController={selectedController}></IterableUL>
+          listController={selectionController}></IterableUL>
       </div>
     </form>
   );
