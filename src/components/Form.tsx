@@ -58,6 +58,8 @@ export default function Form() {
         (obj: LocationData) => obj.name === name
       ) || { name: '', coords: [0, 0] };
       setSelected(name);
+      console.log('testing onclick');
+      console.log(name);
       selectedLocationData && setCoords(selectedLocationData.coords);
     } else {
       setSuggestionList([]);
@@ -69,6 +71,7 @@ export default function Form() {
     });
     setInputValue('');
     selectionController(selected);
+
     const weatherKey = process.env.REACT_APP_WEATHER_KEY;
     const weatherAPI = async (target: string, key: string | undefined) => {
       try {
@@ -91,6 +94,9 @@ export default function Form() {
       }
     };
     setTimeout(() => {
+      console.log('testing onclick');
+      console.log(selected);
+      //ON ONCLICK ACTION SELECTED STAYS EMPTY STRING
       selected && weatherAPI(selected, weatherKey);
     }, 500);
   };
@@ -100,6 +106,7 @@ export default function Form() {
       id='input-form'
       onSubmit={(e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        console.log('from default form submit action');
         handleSubmit();
       }}
       onBlur={(e: FormEvent<HTMLFormElement>) => {

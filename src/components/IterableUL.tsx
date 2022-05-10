@@ -6,32 +6,33 @@ interface Props {
   listController: (k?: string) => void;
   submit: () => void;
 }
-export default function IterableUL({ list, submit, listController }: Props) {
+export default function IterableUL({
+  list,
+  submit,
+  listController: selectionController,
+}: Props) {
   const [currentOption, setOption] = React.useState(0);
   const context = React.useContext(Ctx);
-  React.useEffect(() => {
-    const focusValue = context?.state.inputFocus;
-    focusValue && setOption(0);
-  }, [context?.state.inputFocus]);
   const onKeyboardAction = (key: React.KeyboardEvent<HTMLInputElement>) => {
-    const optionCalculator = (actionType: number) => {
-      listController(list[currentOption].name);
-      const nextValue = currentOption + actionType;
-      const inc = () =>
-        nextValue < length ? setOption(nextValue) : setOption(0);
-      const dec = () =>
-        nextValue >= 0 ? setOption(nextValue) : setOption(length - 1);
-
-      actionType > 0 ? inc() : dec();
+    const selectedOptionManager = (actionType: number) => {
+      const nextRawValue = currentOption + actionType;
+      const nextValue =
+        nextRawValue < 0
+          ? length - 1
+          : nextRawValue < length
+          ? nextRawValue
+          : 0;
+      selectionController(list[nextValue].name);
+      setOption(nextValue);
     };
     const length = list.length;
     switch (key.code) {
       case 'ArrowDown': {
-        optionCalculator(1);
+        selectedOptionManager(1);
         return;
       }
       case 'ArrowUp': {
-        optionCalculator(-1);
+        selectedOptionManager(-1);
         return;
       }
       case 'Enter': {
@@ -41,7 +42,7 @@ export default function IterableUL({ list, submit, listController }: Props) {
       }
       case 'Escape': {
         console.log('esc ');
-        listController();
+        selectionController();
         context?.dispatch({ type: 'input-focus-change' });
         return;
       }
@@ -54,11 +55,12 @@ export default function IterableUL({ list, submit, listController }: Props) {
   React.useEffect(() => {
     const focused = context?.state.inputFocus;
     focused ? ul.current?.focus() : ul.current?.blur();
+    focused && setOption(0);
   }, [context?.state.inputFocus]);
   return (
     <ul
       role='listbox'
-      tabIndex={1}
+      tabIndex={0}
       onKeyDown={onKeyboardAction}
       ref={ul}
       className={`${
@@ -71,7 +73,10 @@ export default function IterableUL({ list, submit, listController }: Props) {
           isSelected={i === currentOption}
           actionFn={(e) => {
             e.preventDefault();
-            submit();
+            console.log('from item click');
+            console.log(list[currentOption].name);
+            // selectionController(list[currentOption].name);
+            // submit();
           }}
         />
       ))}

@@ -12,12 +12,12 @@ export default function Option({
 }: PropTypes) {
   return (
     <li
-      tabIndex={1}
+      tabIndex={0}
       value={city}
       onClick={(e: React.SyntheticEvent<HTMLOptionElement>) => actionFn(e)}
       role='presentation'
-      className={`p-2 cursor-pointer hover:text-mainBlue ${
-        isSelected && 'bg-white'
+      className={`p-2 cursor-pointer hover:text-mainBlue hover:bg-white/25 ${
+        isSelected && 'text-mainBlue bg-white/25'
       }`}>
       <div role='option' aria-selected={isSelected}>
         {city}

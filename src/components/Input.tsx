@@ -3,14 +3,12 @@ import { Ctx } from '../context';
 type InputProps = {
   updateFunction: (a: HTMLInputElement) => void;
   arrow?: boolean;
-  isFocused?: boolean;
   value: string;
 };
 export default function Input({
   updateFunction,
   value,
   arrow = false,
-  isFocused = false,
 }: InputProps) {
   const input = React.createRef<HTMLInputElement>();
   const context = React.useContext(Ctx);
