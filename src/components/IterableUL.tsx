@@ -3,7 +3,7 @@ import { Ctx } from '../context';
 import Option from './Option';
 interface Props {
   list: { name: string; coords: number[] }[];
-  listController: (k?: string) => void;
+  listController: (k?: { name: string; coords: number[] }) => void;
   submit: () => void;
 }
 export default function IterableUL({
@@ -22,7 +22,7 @@ export default function IterableUL({
           : nextRawValue < length
           ? nextRawValue
           : 0;
-      selectionController(list[nextValue].name);
+      selectionController(list[nextValue]);
       setOption(nextValue);
     };
     const length = list.length;
@@ -36,12 +36,11 @@ export default function IterableUL({
         return;
       }
       case 'Enter': {
-        console.log('enter ');
+        selectionController(list[currentOption]);
         submit();
         return;
       }
       case 'Escape': {
-        console.log('esc ');
         selectionController();
         context?.dispatch({ type: 'input-focus-change' });
         return;
@@ -73,10 +72,8 @@ export default function IterableUL({
           isSelected={i === currentOption}
           actionFn={(e) => {
             e.preventDefault();
-            console.log('from item click');
-            console.log(list[currentOption].name);
-            // selectionController(list[currentOption].name);
-            // submit();
+            selectionController(list[i]);
+            submit();
           }}
         />
       ))}

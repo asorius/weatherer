@@ -25,8 +25,7 @@ const locationAPI = async (target: string, key: string | undefined) => {
 export default function Form() {
   const [inputValue, setInputValue] = React.useState('');
   const [suggestionList, setSuggestionList] = React.useState([]);
-  const [selected, setSelected] = React.useState('');
-  const [coords, setCoords] = React.useState([0, 0]);
+  const [selected, setSelected] = React.useState({ name: '', coords: [0, 0] });
   const selectElement = React.createRef<HTMLSelectElement>();
   const context = useContext(Ctx);
   React.useEffect(() => {
@@ -41,26 +40,24 @@ export default function Form() {
       try {
         const suggestions = await locationAPI(target, locationKey);
         setSuggestionList(suggestions);
+        setSelected(suggestionList[0]);
       } catch (e) {
         return { error: true };
       }
     };
     APICalls(inputValue);
-  }, [inputValue]);
+  }, [inputValue, suggestionList]);
 
   const updateFn = (currentTarget: HTMLInputElement) => {
     setInputValue(currentTarget.value);
   };
 
-  const selectionController = (name?: string) => {
-    if (name) {
-      const selectedLocationData: LocationData = suggestionList.find(
-        (obj: LocationData) => obj.name === name
-      ) || { name: '', coords: [0, 0] };
-      setSelected(name);
-      console.log('testing onclick');
-      console.log(name);
-      selectedLocationData && setCoords(selectedLocationData.coords);
+  const selectionController = (selectedObj?: {
+    name: string;
+    coords: number[];
+  }) => {
+    if (selectedObj) {
+      setSelected(selectedObj);
     } else {
       setSuggestionList([]);
     }
@@ -73,9 +70,9 @@ export default function Form() {
     selectionController(selected);
 
     const weatherKey = process.env.REACT_APP_WEATHER_KEY;
-    const weatherAPI = async (target: string, key: string | undefined) => {
+    const weatherAPI = async (key: string | undefined) => {
       try {
-        const [lon, lat] = coords;
+        const [lon, lat] = selected.coords;
         const responseCurrent = await fetch(
           `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${key}&units=metric`
         );
@@ -94,10 +91,7 @@ export default function Form() {
       }
     };
     setTimeout(() => {
-      console.log('testing onclick');
-      console.log(selected);
-      //ON ONCLICK ACTION SELECTED STAYS EMPTY STRING
-      selected && weatherAPI(selected, weatherKey);
+      selected && weatherAPI(weatherKey);
     }, 500);
   };
 
@@ -106,7 +100,6 @@ export default function Form() {
       id='input-form'
       onSubmit={(e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('from default form submit action');
         handleSubmit();
       }}
       onBlur={(e: FormEvent<HTMLFormElement>) => {
