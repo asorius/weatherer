@@ -15,6 +15,7 @@ interface DayWeatherData {
 }
 export default function Forecast() {
   const context = React.useContext(Ctx);
+  const parent = React.createRef<HTMLDivElement>();
   const data = React.useMemo(
     () => context?.state.data?.forecast.list || [],
     [context?.state.data?.forecast.list]
@@ -56,27 +57,62 @@ export default function Forecast() {
     console.log(list);
     setDays(list);
   }, [data]);
-  return data ? (
-    <div>
-      {daysWithTemps.map((el: DayWeatherData, i: number) => (
-        <div
-          key={i}
-          // className='-translate-x-[60%] translate-y-[50px] scale-x-[0.86] scale-y-1 skew-x-0 skew-y-[8deg] translate-z-0 text-black'>
-          className=' text-black'>
-          {el.date.year} {el.date.month} {el.date.day}
-          <br />
-          {el.data[0].weather.temp}
-          <img
-            src={
-              'https://openweathermap.org/img/w/' +
-              el.data[0].weather.icon +
-              '.png'
-            }
-            alt='icon'
-          />
-          {el.data[0].weather.description}
-        </div>
-      ))}
+  const [x, y] = [50, 50];
+  return (
+    <div
+      className='grid grid-cols-1 grid-flow-row w-full place-items-center relative'
+      ref={parent}>
+      {data && (
+        <>
+          {daysWithTemps.map((dayObject: DayWeatherData, i: number) => {
+            const { year, month, day } = dayObject.date;
+
+            return (
+              <div
+                key={i}
+                className='h-64 w-full border-2 border-cyan-500 relative'>
+                {year} {month} {day}
+                <br />
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  viewBox={`0 0 ${+x} ${+y}`}
+                  className='absolute top-0 left-0 h-full w-full'>
+                  {dayObject.data.map((el, ii, arr) => {
+                    const total = arr.length;
+                    const index = ii + 1;
+                    const temp = el.weather.temp;
+                    const divStep = y / total;
+                    // COORDINATES
+                    const x1 = `${x / 2 + (index === 1 ? 0 : temp)}`,
+                      y1 = `${index === 1 ? 0 : index * divStep}`,
+                      x2 = `${
+                        x / 2 +
+                        (index === 1
+                          ? temp
+                          : index < total
+                          ? arr[index].weather.temp
+                          : 0)
+                      }`,
+                      y2 = `${1 + index * divStep}`;
+
+                    console.log({ x1, y1, x2, y2 });
+                    return (
+                      <line
+                        key={index}
+                        x1={x1}
+                        y1={y1}
+                        x2={x2}
+                        y2={y2}
+                        stroke='red'
+                      />
+                    );
+                  })}
+                </svg>
+              </div>
+            );
+          })}
+        </>
+      )}
     </div>
-  ) : null;
+  );
 }
