@@ -1,7 +1,9 @@
 import React from 'react';
 import Current from './components/Current';
+import Forecast from './components/Forecast';
 import Form from './components/Form';
 import Header from './components/Header';
+
 import { WithContext } from './context';
 function App() {
   return (
@@ -14,6 +16,7 @@ function App() {
           </div>
           <div id='this-grows-in'>
             <Current />
+            <Forecast />
           </div>
         </div>
       </div>
