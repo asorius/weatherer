@@ -83,28 +83,28 @@ export default function Forecast() {
                     const temp = el.weather.temp;
                     const divStep = y / total;
                     // COORDINATES
-                    const x1 = `${x / 2 + (index === 1 ? 0 : temp)}`,
+                    const x1 = `${x / 2 + temp}`,
                       y1 = `${index === 1 ? 0 : index * divStep}`,
                       x2 = `${
-                        x / 2 +
-                        (index === 1
-                          ? temp
-                          : index < total
-                          ? arr[index].weather.temp
-                          : 0)
+                        x / 2 + (index < total ? arr[index].weather.temp : 0)
                       }`,
-                      y2 = `${1 + index * divStep}`;
+                      y2 = `${(1 + index) * divStep}`;
 
                     console.log({ x1, y1, x2, y2 });
                     return (
-                      <line
-                        key={index}
-                        x1={x1}
-                        y1={y1}
-                        x2={x2}
-                        y2={y2}
-                        stroke='red'
-                      />
+                      <>
+                        <line
+                          key={index}
+                          x1={x1}
+                          y1={y1}
+                          x2={x2}
+                          y2={y2}
+                          stroke='red'
+                        />
+                        <text x={x1} y={y1 + 5} className={'text-[.3rem]'}>
+                          {el.weather.temp}&#8451; at {el.time.substring(-4)}
+                        </text>
+                      </>
                     );
                   })}
                 </svg>
