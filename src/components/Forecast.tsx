@@ -56,7 +56,7 @@ export default function Forecast() {
       ref={parent}>
       {dataFromContext && (
         <>
-          {daysWithTemps.map((dayObject: DayWeatherData, i: number) => {
+          {daysWithTemps.map((dayObject: DayWeatherData, i: number, array) => {
             const [year, month, day] = dayObject.date.split(':');
             return (
               <div
@@ -70,17 +70,17 @@ export default function Forecast() {
                   className='absolute top-0 left-0 h-full w-full'>
                   {dayObject.data.map((el, index, arr) => {
                     const total = arr.length;
+                    const isLast = index + 1 === total;
                     const temp = el.weather.temp;
                     const divStep = y / total;
-                    // COORDINATES
-                    const x1 = `${x / 2 + temp}`,
-                      y1 = `${index === 0 ? 0 : (index + 1) * divStep}`,
-                      x2 = `${
+                    // console.log({ NEXT: array[i + 1].data[0].weather.temp });
+                    // ADD
+                    const x1 = x / 2 + temp,
+                      y1 = index === 0 ? 0 : (index + 1) * divStep,
+                      x2 =
                         x / 2 +
-                        (index + 1 < total ? arr[index + 1].weather.temp : 0)
-                      }`,
-                      y2 = `${(2 + index) * divStep}`;
-                    console.log(index % 2, index);
+                        (index + 1 < total ? arr[index + 1].weather.temp : 0),
+                      y2 = (2 + index) * divStep;
                     return (
                       <>
                         <line
@@ -91,19 +91,29 @@ export default function Forecast() {
                           y2={y2}
                           stroke='red'
                         />
+
                         <text
-                          x={index % 2 ? +x1 + 5 : +x1 - 40}
-                          y={
-                            index === 0
-                              ? +y1 + 5
-                              : index + 1 === total
-                              ? +y1 - 2
-                              : +y1
-                          }
+                          x={index % 2 ? x1 + 5 : x1 - 40}
+                          y={index === 0 ? y1 + 5 : isLast ? y1 - 2 : y1}
                           className={'text-[.3rem]'}
                           key={index + 20}>
                           {el.weather.temp}&#8451; at {el.time.substring(-4)}
                         </text>
+                        {isLast && (
+                          <line
+                            key={index + 40}
+                            x1={x2}
+                            y1={y2}
+                            x2={
+                              25 +
+                              (i + 1 < array.length
+                                ? array[i + 1].data[0].weather.temp / 2
+                                : 0)
+                            }
+                            y2={y2}
+                            stroke='red'
+                          />
+                        )}
                       </>
                     );
                   })}
