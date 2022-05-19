@@ -7,7 +7,7 @@ interface WeatherData {
   temp: number;
 }
 interface DayWeatherData {
-  date: { year: number; month: number; day: number };
+  date: string;
   data: {
     time: string;
     weather: WeatherData;
@@ -16,57 +16,48 @@ interface DayWeatherData {
 export default function Forecast() {
   const context = React.useContext(Ctx);
   const parent = React.createRef<HTMLDivElement>();
-  const data = React.useMemo(
+  const dataFromContext = React.useMemo(
     () => context?.state.data?.forecast.list || [],
     [context?.state.data?.forecast.list]
   );
   const [daysWithTemps, setDays] = React.useState<DayWeatherData[]>([]);
-  const normalizedDate = (timestamp: number) => {
-    const dt = timestamp;
-    const year = new Date(dt).getFullYear();
-    const month = new Date(dt).getMonth() + 1;
-    const day = new Date(dt).getUTCDate();
-    return { year, month, day };
-  };
+
   React.useEffect(() => {
     let list: typeof daysWithTemps = [];
-
-    data.forEach((el: any, i: number) => {
-      if (i + 1 < data.length) {
-        const date = normalizedDate(el.dt * 1000);
-        const time = el.dt_txt.split(' ')[1];
+    dataFromContext.forEach((el: any, i: number) => {
+      if (i + 1 < dataFromContext.length) {
+        const [date, time] = el.dt_txt.split(' ');
         const weather: WeatherData = {
           main: el.weather[0].main,
           description: el.weather[0].description,
           icon: el.weather[0].icon,
           temp: Math.round(el.main.temp),
         };
-        const dayInList = list.find(
-          (dayObj: any) => date.day === dayObj.date.day
-        );
+
+        const dayInList = list.find((dayObj: any) => {
+          return date === dayObj.date;
+        });
         if (dayInList) {
           dayInList.data.push({ time, weather });
         } else {
           list.push({
             date,
-            data: [],
+            data: [{ time, weather }],
           });
         }
       }
     });
-    console.log(list);
     setDays(list);
-  }, [data]);
+  }, [dataFromContext]);
   const [x, y] = [50, 50];
   return (
     <div
       className='grid grid-cols-1 grid-flow-row w-full place-items-center relative'
       ref={parent}>
-      {data && (
+      {dataFromContext && (
         <>
           {daysWithTemps.map((dayObject: DayWeatherData, i: number) => {
-            const { year, month, day } = dayObject.date;
-
+            const [year, month, day] = dayObject.date.split(':');
             return (
               <div
                 key={i}
@@ -77,20 +68,19 @@ export default function Forecast() {
                   xmlns='http://www.w3.org/2000/svg'
                   viewBox={`0 0 ${+x} ${+y}`}
                   className='absolute top-0 left-0 h-full w-full'>
-                  {dayObject.data.map((el, ii, arr) => {
+                  {dayObject.data.map((el, index, arr) => {
                     const total = arr.length;
-                    const index = ii + 1;
                     const temp = el.weather.temp;
                     const divStep = y / total;
                     // COORDINATES
                     const x1 = `${x / 2 + temp}`,
-                      y1 = `${index === 1 ? 0 : index * divStep}`,
+                      y1 = `${index === 0 ? 0 : (index + 1) * divStep}`,
                       x2 = `${
-                        x / 2 + (index < total ? arr[index].weather.temp : 0)
+                        x / 2 +
+                        (index + 1 < total ? arr[index + 1].weather.temp : 0)
                       }`,
-                      y2 = `${(1 + index) * divStep}`;
-
-                    console.log({ x1, y1, x2, y2 });
+                      y2 = `${(2 + index) * divStep}`;
+                    console.log(index % 2, index);
                     return (
                       <>
                         <line
@@ -101,7 +91,17 @@ export default function Forecast() {
                           y2={y2}
                           stroke='red'
                         />
-                        <text x={x1} y={y1 + 5} className={'text-[.3rem]'}>
+                        <text
+                          x={index % 2 ? +x1 + 5 : +x1 - 40}
+                          y={
+                            index === 0
+                              ? +y1 + 5
+                              : index + 1 === total
+                              ? +y1 - 2
+                              : +y1
+                          }
+                          className={'text-[.3rem]'}
+                          key={index + 20}>
                           {el.weather.temp}&#8451; at {el.time.substring(-4)}
                         </text>
                       </>
