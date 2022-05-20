@@ -49,78 +49,125 @@ export default function Forecast() {
     });
     setDays(list);
   }, [dataFromContext]);
-  const [x, y] = [50, 50];
+  const [x, y] = [100, 100];
   return (
     <div
       className='grid grid-cols-1 grid-flow-row w-full place-items-center relative'
       ref={parent}>
       {dataFromContext && (
         <>
-          {daysWithTemps.map((dayObject: DayWeatherData, i: number, array) => {
-            const [year, month, day] = dayObject.date.split(':');
-            return (
-              <div
-                key={i}
-                className='h-64 w-full border-2 border-cyan-500 relative'>
-                {year} {month} {day}
-                <br />
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  viewBox={`0 0 ${+x} ${+y}`}
-                  className='absolute top-0 left-0 h-full w-full'>
-                  {dayObject.data.map((el, index, arr) => {
-                    const total = arr.length;
-                    const isLast = index + 1 === total;
-                    const temp = el.weather.temp;
-                    const divStep = y / total;
-                    // console.log({ NEXT: array[i + 1].data[0].weather.temp });
-                    // ADD
-                    const x1 = x / 2 + temp,
-                      y1 = index === 0 ? 0 : (index + 1) * divStep,
-                      x2 =
-                        x / 2 +
-                        (index + 1 < total ? arr[index + 1].weather.temp : 0),
-                      y2 = (2 + index) * divStep;
-                    return (
-                      <>
-                        <line
-                          key={index}
-                          x1={x1}
-                          y1={y1}
-                          x2={x2}
-                          y2={y2}
-                          stroke='red'
-                        />
+          {daysWithTemps.map(
+            (dayObject: DayWeatherData, dayIndex: number, daysArray) => {
+              const [year, month, day] = dayObject.date.split(':');
+              return (
+                <div
+                  key={dayIndex}
+                  className='h-[20rem] w-full border-2 border-cyan-500 relative'>
+                  {year} {month} {day}
+                  <br />
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    viewBox={`0 0 ${x} ${y}`}
+                    className='absolute top-0 left-0 h-full w-full'>
+                    {dayObject.data.map((dayElement, timeIndex, timesArray) => {
+                      const total = timesArray.length;
+                      const isLastTime = timeIndex + 1 === total;
+                      const isFirstTime = timeIndex === 0;
+                      const isLastDay = dayIndex === daysArray.length - 1;
+                      const temp = dayElement.weather.temp;
+                      const divStep = x / total;
+                      // console.log({ NEXT: array[i + 1].data[0].weather.temp });
+                      // ADD LINE WITH HALF VALUE FROM NEXT UPCOMING DAY FROM DAYSWITHTEMPS
+                      const y1 = y / 2 + temp,
+                        x1 = timeIndex === 0 ? 0 : (timeIndex + 1) * divStep,
+                        y2 =
+                          y / 2 +
+                          (timeIndex + 1 < total
+                            ? timesArray[timeIndex + 1].weather.temp
+                            : 0),
+                        x2 = (2 + timeIndex) * divStep;
+                      const lastPreviousDayTemp = () => {
+                        if (dayIndex - 1 >= 0) {
+                          return daysArray[dayIndex - 1].data.slice(-1)[0]
+                            .weather.temp;
+                        } else if (timeIndex - 1 >= 0) {
+                          return timesArray[timeIndex - 1].weather.temp;
+                        } else {
+                          return 0;
+                        }
+                      };
 
-                        <text
-                          x={index % 2 ? x1 + 5 : x1 - 40}
-                          y={index === 0 ? y1 + 5 : isLast ? y1 - 2 : y1}
-                          className={'text-[.3rem]'}
-                          key={index + 20}>
-                          {el.weather.temp}&#8451; at {el.time.substring(-4)}
-                        </text>
-                        {isLast && (
+                      const firstNextDayTemp = () => {
+                        if (dayIndex + 1 < daysArray.length) {
+                          return daysArray[dayIndex + 1].data[0].weather.temp;
+                        } else if (timeIndex + 1 < total) {
+                          return timesArray[timeIndex + 1].weather.temp;
+                        } else {
+                          return 0;
+                        }
+                      };
+
+                      const midTemp = (t1: number, t2: number) => {
+                        return t1 + Math.abs(t1 - t2) / 2;
+                      };
+                      return (
+                        <>
+                          {isFirstTime && (
+                            <line
+                              key={timeIndex + 60}
+                              x1={0}
+                              y1={midTemp(lastPreviousDayTemp(), temp)}
+                              x2={x - divStep / 4}
+                              y2={y1}
+                              stroke='blue'
+                            />
+                          )}
+
                           <line
-                            key={index + 40}
-                            x1={x2}
-                            y1={y2}
-                            x2={
-                              25 +
-                              (i + 1 < array.length
-                                ? array[i + 1].data[0].weather.temp / 2
-                                : 0)
+                            key={timeIndex}
+                            x1={
+                              timeIndex === 0
+                                ? x1 + divStep / (timeIndex + 2)
+                                : x1
                             }
+                            y1={timeIndex === 0 ? y1 / 2 : y1}
+                            x2={x2}
                             y2={y2}
                             stroke='red'
                           />
-                        )}
-                      </>
-                    );
-                  })}
-                </svg>
-              </div>
-            );
-          })}
+
+                          <text
+                            x={timeIndex % 2 ? x1 + 5 : x1 - 40}
+                            y={
+                              timeIndex === 0
+                                ? y1 + 5
+                                : isLastTime
+                                ? y1 - 2
+                                : y1
+                            }
+                            className={'text-[.3rem]'}
+                            key={timeIndex + 20}>
+                            {dayElement.weather.temp}&#8451; at{' '}
+                            {dayElement.time.substring(-4)}
+                          </text>
+                          {!isLastDay && isLastTime && (
+                            <line
+                              key={timeIndex + 50}
+                              x1={x2}
+                              y1={y2}
+                              x2={x2 + divStep / 2}
+                              y2={midTemp(temp, firstNextDayTemp())}
+                              stroke='black'
+                            />
+                          )}
+                        </>
+                      );
+                    })}
+                  </svg>
+                </div>
+              );
+            }
+          )}
         </>
       )}
     </div>

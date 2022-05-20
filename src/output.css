@@ -696,6 +696,9 @@ Ensure the default browser behavior of the `hidden` attribute.
   font-size: 3.75rem;
   line-height: 1;
 }
+.text-\[\.3rem\] {
+  font-size: .3rem;
+}
 .text-7xl {
   font-size: 4.5rem;
   line-height: 1;
