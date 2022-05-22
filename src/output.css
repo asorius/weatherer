@@ -509,8 +509,8 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-24 {
   height: 6rem;
 }
-.h-64 {
-  height: 16rem;
+.h-\[20rem\] {
+  height: 20rem;
 }
 .h-full {
   height: 100%;

@@ -52,7 +52,7 @@ export default function Forecast() {
   const [x, y] = [100, 100];
   return (
     <div
-      className='grid grid-cols-1 grid-flow-row w-full place-items-center relative'
+      className='grid grid-rows-1 grid-flow-col w-full place-items-center relative'
       ref={parent}>
       {dataFromContext && (
         <>
@@ -69,6 +69,22 @@ export default function Forecast() {
                     xmlns='http://www.w3.org/2000/svg'
                     viewBox={`0 0 ${x} ${y}`}
                     className='absolute top-0 left-0 h-full w-full'>
+                    <line
+                      key={dayIndex + 60}
+                      x1={0}
+                      x2={x}
+                      y1={y / 2}
+                      y2={y / 2}
+                      stroke='grey'
+                    />
+
+                    <text
+                      x={0}
+                      y={y / 2 + 5}
+                      className={'text-[.3rem]'}
+                      key={88}>
+                      0
+                    </text>
                     {dayObject.data.map((dayElement, timeIndex, timesArray) => {
                       const total = timesArray.length;
                       const isLastTime = timeIndex + 1 === total;
@@ -78,37 +94,44 @@ export default function Forecast() {
                       const divStep = x / total;
                       // console.log({ NEXT: array[i + 1].data[0].weather.temp });
                       // ADD LINE WITH HALF VALUE FROM NEXT UPCOMING DAY FROM DAYSWITHTEMPS
-                      const y1 = y / 2 + temp,
+                      const y1 = y / 2 - temp,
                         x1 = timeIndex === 0 ? 0 : (timeIndex + 1) * divStep,
                         y2 =
-                          y / 2 +
+                          y / 2 -
                           (timeIndex + 1 < total
                             ? timesArray[timeIndex + 1].weather.temp
-                            : 0),
+                            : dayIndex + 1 < daysArray.length
+                            ? daysArray[dayIndex + 1].data.slice(-1)[0].weather
+                                .temp
+                            : y1),
                         x2 = (2 + timeIndex) * divStep;
                       const lastPreviousDayTemp = () => {
                         if (dayIndex - 1 >= 0) {
-                          return daysArray[dayIndex - 1].data.slice(-1)[0]
-                            .weather.temp;
+                          const temp =
+                            daysArray[dayIndex - 1].data.slice(-1)[0].weather
+                              .temp;
+
+                          return temp;
                         } else if (timeIndex - 1 >= 0) {
                           return timesArray[timeIndex - 1].weather.temp;
                         } else {
-                          return 0;
+                          return y1 - 25;
                         }
                       };
 
                       const firstNextDayTemp = () => {
-                        if (dayIndex + 1 < daysArray.length) {
-                          return daysArray[dayIndex + 1].data[0].weather.temp;
-                        } else if (timeIndex + 1 < total) {
+                        if (timeIndex + 1 < total) {
                           return timesArray[timeIndex + 1].weather.temp;
+                        } else if (dayIndex + 1 < daysArray.length) {
+                          return daysArray[dayIndex + 1].data[0].weather.temp;
                         } else {
-                          return 0;
+                          return y1 - 25;
                         }
                       };
 
-                      const midTemp = (t1: number, t2: number) => {
-                        return t1 + Math.abs(t1 - t2) / 2;
+                      const tempDiff = (t1: number, t2: number) => {
+                        const diff = (t1 - t2) / 2;
+                        return diff;
                       };
                       return (
                         <>
@@ -116,8 +139,11 @@ export default function Forecast() {
                             <line
                               key={timeIndex + 60}
                               x1={0}
-                              y1={midTemp(lastPreviousDayTemp(), temp)}
-                              x2={x - divStep / 4}
+                              y1={
+                                y / 2 -
+                                (temp + tempDiff(lastPreviousDayTemp(), temp))
+                              }
+                              x2={divStep / 2}
                               y2={y1}
                               stroke='blue'
                             />
@@ -130,7 +156,7 @@ export default function Forecast() {
                                 ? x1 + divStep / (timeIndex + 2)
                                 : x1
                             }
-                            y1={timeIndex === 0 ? y1 / 2 : y1}
+                            y1={y1}
                             x2={x2}
                             y2={y2}
                             stroke='red'
@@ -148,7 +174,7 @@ export default function Forecast() {
                             className={'text-[.3rem]'}
                             key={timeIndex + 20}>
                             {dayElement.weather.temp}&#8451; at{' '}
-                            {dayElement.time.substring(-4)}
+                            {/* {dayElement.time.substring(-4)} */}
                           </text>
                           {!isLastDay && isLastTime && (
                             <line
@@ -156,7 +182,10 @@ export default function Forecast() {
                               x1={x2}
                               y1={y2}
                               x2={x2 + divStep / 2}
-                              y2={midTemp(temp, firstNextDayTemp())}
+                              y2={
+                                y / 2 -
+                                (temp + tempDiff(firstNextDayTemp(), temp))
+                              }
                               stroke='black'
                             />
                           )}
