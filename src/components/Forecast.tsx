@@ -91,11 +91,14 @@ export default function Forecast() {
                       const isFirstTime = timeIndex === 0;
                       const isLastDay = dayIndex === daysArray.length - 1;
                       const temp = dayElement.weather.temp;
-                      const divStep = x / total;
-                      // console.log({ NEXT: array[i + 1].data[0].weather.temp });
-                      // ADD LINE WITH HALF VALUE FROM NEXT UPCOMING DAY FROM DAYSWITHTEMPS
+                      const time = dayElement.time;
+                      const divStep = x / (total + 1);
+
                       const y1 = y / 2 - temp,
-                        x1 = timeIndex === 0 ? 0 : (timeIndex + 1) * divStep,
+                        x1 =
+                          timeIndex === 0
+                            ? divStep / 2
+                            : timeIndex * divStep + divStep / 2,
                         y2 =
                           y / 2 -
                           (timeIndex + 1 < total
@@ -104,7 +107,10 @@ export default function Forecast() {
                             ? daysArray[dayIndex + 1].data.slice(-1)[0].weather
                                 .temp
                             : y1),
-                        x2 = (2 + timeIndex) * divStep;
+                        x2 =
+                          timeIndex === 0
+                            ? divStep + divStep / 2
+                            : (timeIndex + 1) * divStep + divStep / 2;
                       const lastPreviousDayTemp = () => {
                         if (dayIndex - 1 >= 0) {
                           const temp =
@@ -136,58 +142,81 @@ export default function Forecast() {
                       return (
                         <>
                           {isFirstTime && (
-                            <line
-                              key={timeIndex + 60}
-                              x1={0}
-                              y1={
-                                y / 2 -
-                                (temp + tempDiff(lastPreviousDayTemp(), temp))
-                              }
-                              x2={divStep / 2}
-                              y2={y1}
-                              stroke='blue'
-                            />
+                            <>
+                              <line
+                                key={timeIndex + 60}
+                                x1={0}
+                                y1={
+                                  y / 2 -
+                                  (temp + tempDiff(lastPreviousDayTemp(), temp))
+                                }
+                                x2={divStep / 2}
+                                y2={y1}
+                                stroke='blue'
+                              />
+                            </>
                           )}
-
                           <line
                             key={timeIndex}
-                            x1={
-                              timeIndex === 0
-                                ? x1 + divStep / (timeIndex + 2)
-                                : x1
-                            }
+                            x1={x1}
                             y1={y1}
                             x2={x2}
                             y2={y2}
                             stroke='red'
                           />
-
+                          <line
+                            key={timeIndex + 200}
+                            x1={x1}
+                            y1={0}
+                            x2={x1}
+                            y2={y}
+                            stroke='green'
+                          />
                           <text
-                            x={timeIndex % 2 ? x1 + 5 : x1 - 40}
-                            y={
-                              timeIndex === 0
-                                ? y1 + 5
-                                : isLastTime
-                                ? y1 - 2
-                                : y1
-                            }
+                            x={x1 - 5}
+                            y={y}
+                            className={'text-[.2rem]'}
+                            transform={`rotate( ${x1 - 5} ${y} 90)`}>
+                            {time}
+                          </text>{' '}
+                          <text
+                            x={x1}
+                            y={y1 - 5}
                             className={'text-[.3rem]'}
                             key={timeIndex + 20}>
-                            {dayElement.weather.temp}&#8451; at{' '}
+                            {dayElement.weather.temp}&#8451;
                             {/* {dayElement.time.substring(-4)} */}
                           </text>
                           {!isLastDay && isLastTime && (
-                            <line
-                              key={timeIndex + 50}
-                              x1={x2}
-                              y1={y2}
-                              x2={x2 + divStep / 2}
-                              y2={
-                                y / 2 -
-                                (temp + tempDiff(firstNextDayTemp(), temp))
-                              }
-                              stroke='black'
-                            />
+                            <>
+                              <line
+                                key={timeIndex + 50}
+                                x1={x2}
+                                y1={y2}
+                                x2={x2 + divStep / 2}
+                                y2={
+                                  y / 2 -
+                                  (temp + tempDiff(firstNextDayTemp(), temp))
+                                }
+                                stroke='black'
+                              />
+                              <line
+                                key={timeIndex + 200}
+                                x1={x2}
+                                y1={0}
+                                x2={x2}
+                                y2={y}
+                                stroke='green'
+                              />
+                              <text
+                                x={x2 - 5}
+                                y={y}
+                                className={'text-[.3rem]'}
+                                transform={`rotate( ${x} ${y} 90)`}>
+                                {time}
+                              </text>{' '}
+                              */
+                            </>
                           )}
                         </>
                       );
