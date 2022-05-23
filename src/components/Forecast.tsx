@@ -52,7 +52,7 @@ export default function Forecast() {
   const [x, y] = [100, 100];
   return (
     <div
-      className='grid grid-rows-1 grid-flow-col w-full place-items-center relative'
+      className='grid grid-rows-1 grid-flow-col w-full place-items-center relative  divide-x hover:divide-x-4'
       ref={parent}>
       {dataFromContext && (
         <>
@@ -60,15 +60,14 @@ export default function Forecast() {
             (dayObject: DayWeatherData, dayIndex: number, daysArray) => {
               const [year, month, day] = dayObject.date.split(':');
               return (
-                <div
-                  key={dayIndex}
-                  className='h-[20rem] w-full border-2 border-cyan-500 relative'>
+                <div key={dayIndex} className='h-[20rem] w-full relative'>
                   {year} {month} {day}
                   <br />
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     viewBox={`0 0 ${x} ${y}`}
                     className='absolute top-0 left-0 h-full w-full'>
+                    {/* MAIN X AXIS  -----*/}
                     <line
                       key={dayIndex + 60}
                       x1={0}
@@ -77,23 +76,25 @@ export default function Forecast() {
                       y2={y / 2}
                       stroke='grey'
                     />
-
-                    <text
-                      x={0}
-                      y={y / 2 + 5}
-                      className={'text-[.3rem]'}
-                      key={88}>
-                      0
-                    </text>
+                    {dayIndex === 0 && (
+                      <text
+                        x={0}
+                        y={y / 2 + 5}
+                        className={'text-[.3rem]'}
+                        key={88}>
+                        0
+                      </text>
+                    )}
+                    {/* ------------ */}
                     {dayObject.data.map((dayElement, timeIndex, timesArray) => {
                       const total = timesArray.length;
                       const isLastTime = timeIndex + 1 === total;
                       const isFirstTime = timeIndex === 0;
                       const isLastDay = dayIndex === daysArray.length - 1;
                       const temp = dayElement.weather.temp;
-                      const time = dayElement.time;
-                      const divStep = x / (total + 1);
+                      const time = dayElement.time.slice(0, -3);
 
+                      const divStep = x / (total + 1);
                       const y1 = y / 2 - temp,
                         x1 =
                           timeIndex === 0
@@ -141,6 +142,7 @@ export default function Forecast() {
                       };
                       return (
                         <>
+                          {/* FIRST CONNECTION LINE */}
                           {isFirstTime && (
                             <>
                               <line
@@ -156,39 +158,49 @@ export default function Forecast() {
                               />
                             </>
                           )}
+                          {/* ------------ */}
+                          {/* MAIN GRAPH */}
                           <line
+                            id=''
                             key={timeIndex}
                             x1={x1}
                             y1={y1}
                             x2={x2}
                             y2={y2}
-                            stroke='red'
-                          />
+                            className='stroke-mainOrange'>
+                            <title>Temperature graph</title>
+                          </line>
+                          {/* ------------ */}
+                          {/* TIME AXIS */}
                           <line
                             key={timeIndex + 200}
                             x1={x1}
                             y1={0}
                             x2={x1}
                             y2={y}
-                            stroke='green'
-                          />
-                          <text
-                            x={x1 - 5}
-                            y={y}
-                            className={'text-[.2rem]'}
-                            transform={`rotate( ${x1 - 5} ${y} 90)`}>
+                            className='stroke-1 stroke-gray-400/25'>
+                            <title>{time}</title>
+                          </line>
+                          <text x={x1 - 5} y={y + 5} className={'text-[.2rem]'}>
                             {time}
                           </text>{' '}
+                          {/* ------------ */}
+                          {/* TEMPERATURE LABEL */}
                           <text
                             x={x1}
                             y={y1 - 5}
                             className={'text-[.3rem]'}
                             key={timeIndex + 20}>
                             {dayElement.weather.temp}&#8451;
-                            {/* {dayElement.time.substring(-4)} */}
                           </text>
+                          <circle cx={x1} cy={y1} r={1} key={timeIndex + 70}>
+                            <title>{dayElement.weather.description}</title>
+                          </circle>
+                          {/* ------------ */}
+                          {/* LAST TIME INDEX*/}
                           {!isLastDay && isLastTime && (
                             <>
+                              {/* LAST CONNECTION LINE */}
                               <line
                                 key={timeIndex + 50}
                                 x1={x2}
@@ -200,22 +212,25 @@ export default function Forecast() {
                                 }
                                 stroke='black'
                               />
+                              {/* ------------ */}
+                              {/* TIME AXIS */}
                               <line
                                 key={timeIndex + 200}
                                 x1={x2}
                                 y1={0}
                                 x2={x2}
                                 y2={y}
-                                stroke='green'
+                                className='stroke-1 stroke-gray-400/25'
                               />
+                              {/* ------------ */}
+                              {/* TIME LABEL */}
                               <text
                                 x={x2 - 5}
-                                y={y}
-                                className={'text-[.3rem]'}
-                                transform={`rotate( ${x} ${y} 90)`}>
+                                y={y + 5}
+                                className={'text-[.2rem]'}>
                                 {time}
                               </text>{' '}
-                              */
+                              {/* ------------ */}
                             </>
                           )}
                         </>
