@@ -59,7 +59,8 @@ export default function Forecast() {
           {daysWithTemps.flatMap(
             (dayObject: DayWeatherData, dayIndex: number, daysArray) => {
               const [year, month, day] = dayObject.date.split(':');
-              if (dayIndex + 1 === daysArray.length) {
+              const isLastDay = dayIndex + 1 === daysArray.length;
+              if (isLastDay) {
                 return [];
               }
 
@@ -159,7 +160,7 @@ export default function Forecast() {
                                 }
                                 x2={divStep / 2}
                                 y2={y1}
-                                stroke='blue'
+                                className='stroke-mainOrange'
                               />
                             </>
                           )}
@@ -192,12 +193,14 @@ export default function Forecast() {
                           {/* ------------ */}
                           {/* TEMPERATURE LABEL */}
                           <text
-                            x={x1}
+                            x={x1 - 2}
                             y={y1 - 5}
                             className={'text-[.3rem]'}
                             key={timeIndex + 20}>
                             {dayElement.weather.temp}&#8451;
                           </text>
+                          {/* ------------- */}
+                          {/* PIN POINT */}
                           <circle cx={x1} cy={y1} r={1} key={timeIndex + 70}>
                             <title>{dayElement.weather.description}</title>
                           </circle>
@@ -215,8 +218,26 @@ export default function Forecast() {
                                   y / 2 -
                                   (temp + tempDiff(firstNextDayTemp(), temp))
                                 }
-                                stroke='black'
+                                className='stroke-mainOrange'
                               />
+                              {/* ------------ */}
+                              {/* TEMPERATURE LABEL */}
+                              <text
+                                x={x2 - 3}
+                                y={y2 - 5}
+                                className={'text-[.3rem]'}
+                                key={timeIndex + 20}>
+                                {dayElement.weather.temp}&#8451;
+                              </text>
+                              {/* ------------- */}
+                              {/* PIN POINT */}
+                              <circle
+                                cx={x2}
+                                cy={y2}
+                                r={1}
+                                key={timeIndex + 70}>
+                                <title>{dayElement.weather.description}</title>
+                              </circle>
                               {/* ------------ */}
                               {/* TIME AXIS */}
                               <line
