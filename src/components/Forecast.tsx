@@ -52,7 +52,7 @@ export default function Forecast() {
   const [x, y] = [100, 100];
   return (
     <div
-      className='grid grid-rows-1 grid-flow-col w-full place-items-center relative  divide-x hover:divide-x-4'
+      className='grid grid-rows-1 grid-flow-col w-full place-items-center relative  divide-x hover:divide-x-8'
       ref={parent}>
       {dataFromContext && (
         <>
@@ -65,7 +65,7 @@ export default function Forecast() {
               }
 
               return (
-                <div key={dayIndex} className='h-[20rem] w-full relative'>
+                <div key={dayIndex} className='h-[20rem] w-full relative '>
                   {year} {month} {day}
                   <br />
                   <svg
@@ -79,7 +79,7 @@ export default function Forecast() {
                       x2={x}
                       y1={y / 2}
                       y2={y / 2}
-                      stroke='grey'
+                      className='stroke-[.5] stroke-mainBlue'
                     />
                     {dayIndex === 0 && (
                       <text
@@ -160,7 +160,7 @@ export default function Forecast() {
                                 }
                                 x2={divStep / 2}
                                 y2={y1}
-                                className='stroke-mainOrange'
+                                className='stroke-mainOrange stroke-[.5]'
                               />
                             </>
                           )}
@@ -173,7 +173,7 @@ export default function Forecast() {
                             y1={y1}
                             x2={x2}
                             y2={y2}
-                            className='stroke-mainOrange'>
+                            className='stroke-mainOrange stroke-[.5]'>
                             <title>Temperature graph</title>
                           </line>
                           {/* ------------ */}
@@ -184,7 +184,7 @@ export default function Forecast() {
                             y1={0}
                             x2={x1}
                             y2={y}
-                            className='stroke-1 stroke-gray-400/25'>
+                            className='stroke-[.5] stroke-gray-400/25'>
                             <title>{time}</title>
                           </line>
                           <text x={x1 - 5} y={y + 5} className={'text-[.2rem]'}>
@@ -201,7 +201,7 @@ export default function Forecast() {
                           </text>
                           {/* ------------- */}
                           {/* PIN POINT */}
-                          <circle cx={x1} cy={y1} r={1} key={timeIndex + 70}>
+                          <circle cx={x1} cy={y1} r={0.5} key={timeIndex + 70}>
                             <title>{dayElement.weather.description}</title>
                           </circle>
                           <image
@@ -230,7 +230,7 @@ export default function Forecast() {
                                   y / 2 -
                                   (temp + tempDiff(firstNextDayTemp(), temp))
                                 }
-                                className='stroke-mainOrange'
+                                className='stroke-mainOrange stroke-[.5]'
                               />
                               {/* ------------ */}
                               {/* TEMPERATURE LABEL */}
@@ -246,7 +246,7 @@ export default function Forecast() {
                               <circle
                                 cx={x2}
                                 cy={y2}
-                                r={1}
+                                r={0.5}
                                 key={timeIndex + 70}>
                                 <title>{dayElement.weather.description}</title>
                               </circle>
@@ -270,7 +270,7 @@ export default function Forecast() {
                                 y1={0}
                                 x2={x2}
                                 y2={y}
-                                className='stroke-1 stroke-gray-400/25'
+                                className='stroke-[.5] stroke-gray-400/25'
                               />
                               {/* ------------ */}
                               {/* TIME LABEL */}
