@@ -56,9 +56,13 @@ export default function Forecast() {
       ref={parent}>
       {dataFromContext && (
         <>
-          {daysWithTemps.map(
+          {daysWithTemps.flatMap(
             (dayObject: DayWeatherData, dayIndex: number, daysArray) => {
               const [year, month, day] = dayObject.date.split(':');
+              if (dayIndex + 1 === daysArray.length) {
+                return [];
+              }
+
               return (
                 <div key={dayIndex} className='h-[20rem] w-full relative'>
                   {year} {month} {day}
@@ -88,6 +92,7 @@ export default function Forecast() {
                     {/* ------------ */}
                     {dayObject.data.map((dayElement, timeIndex, timesArray) => {
                       const total = timesArray.length;
+
                       const isLastTime = timeIndex + 1 === total;
                       const isFirstTime = timeIndex === 0;
                       const isLastDay = dayIndex === daysArray.length - 1;
