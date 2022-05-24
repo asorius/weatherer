@@ -204,6 +204,18 @@ export default function Forecast() {
                           <circle cx={x1} cy={y1} r={1} key={timeIndex + 70}>
                             <title>{dayElement.weather.description}</title>
                           </circle>
+                          <image
+                            x={x1 - 5}
+                            y={y1}
+                            width={8}
+                            height={8}
+                            href={
+                              'https://openweathermap.org/img/w/' +
+                              dayElement.weather.icon +
+                              '.png'
+                            }>
+                            <title>{dayElement.weather.description}</title>
+                          </image>
                           {/* ------------ */}
                           {/* LAST TIME INDEX*/}
                           {!isLastDay && isLastTime && (
@@ -238,6 +250,18 @@ export default function Forecast() {
                                 key={timeIndex + 70}>
                                 <title>{dayElement.weather.description}</title>
                               </circle>
+                              <image
+                                x={x2 - 5}
+                                y={y2}
+                                width={8}
+                                height={8}
+                                href={
+                                  'https://openweathermap.org/img/w/' +
+                                  dayElement.weather.icon +
+                                  '.png'
+                                }>
+                                <title>{dayElement.weather.description}</title>
+                              </image>
                               {/* ------------ */}
                               {/* TIME AXIS */}
                               <line
