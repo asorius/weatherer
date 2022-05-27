@@ -52,7 +52,7 @@ export default function Forecast() {
   const [x, y] = [100, 100];
   return (
     <div
-      className='grid grid-rows-1 grid-flow-col w-full place-items-center relative  divide-x hover:divide-x-8'
+      className='grid grid-rows-1 grid-flow-col w-full place-items-center relative  divide-x-8'
       ref={parent}>
       {dataFromContext && (
         <>
@@ -98,22 +98,35 @@ export default function Forecast() {
                       const isFirstTime = timeIndex === 0;
                       const isLastDay = dayIndex === daysArray.length - 1;
                       const temp = dayElement.weather.temp;
+                      const nextTemp = () => {
+                        if (timeIndex + 1 < total) {
+                          const t = timesArray[timeIndex + 1].weather.temp;
+                          console.log({ t });
+                          return t;
+                        } else if (dayIndex + 1 < daysArray.length) {
+                          const nextday = daysArray[dayIndex + 1];
+                          const curentday = daysArray[dayIndex];
+                          // MAY BE AN ISSUE IN THIS LOGIC
+                          const t2 =
+                            daysArray[dayIndex + 1].data[0].weather.temp;
+                          console.log({
+                            curentday,
+                            nextday,
+                          });
+                          return t2;
+                        } else {
+                          return temp;
+                        }
+                      };
                       const time = dayElement.time.slice(0, -3);
-
+                      console.log({ time, temp, nextTemp: nextTemp() });
                       const divStep = x / (total + 1);
                       const y1 = y / 2 - temp,
                         x1 =
                           timeIndex === 0
                             ? divStep / 2
                             : timeIndex * divStep + divStep / 2,
-                        y2 =
-                          y / 2 -
-                          (timeIndex + 1 < total
-                            ? timesArray[timeIndex + 1].weather.temp
-                            : dayIndex + 1 < daysArray.length
-                            ? daysArray[dayIndex + 1].data.slice(-1)[0].weather
-                                .temp
-                            : y1),
+                        y2 = y / 2 - nextTemp(),
                         x2 =
                           timeIndex === 0
                             ? divStep + divStep / 2
@@ -187,7 +200,7 @@ export default function Forecast() {
                             className='stroke-[.5] stroke-gray-400/25'>
                             <title>{time}</title>
                           </line>
-                          <text x={x1 - 5} y={y + 5} className={'text-[.2rem]'}>
+                          <text x={x1 - 5} y={y - 3} className={'text-[.2rem]'}>
                             {time}
                           </text>{' '}
                           {/* ------------ */}
@@ -197,11 +210,16 @@ export default function Forecast() {
                             y={y1 - 5}
                             className={'text-[.3rem]'}
                             key={timeIndex + 20}>
-                            {dayElement.weather.temp}&#8451;
+                            {temp}&#8451;
                           </text>
                           {/* ------------- */}
                           {/* PIN POINT */}
-                          <circle cx={x1} cy={y1} r={0.5} key={timeIndex + 70}>
+                          <circle
+                            cx={x1}
+                            cy={y1}
+                            r={0.75}
+                            className='m-4 hover:stroke-red-500'
+                            key={timeIndex + 70}>
                             <title>{dayElement.weather.description}</title>
                           </circle>
                           <image
@@ -239,14 +257,14 @@ export default function Forecast() {
                                 y={y2 - 5}
                                 className={'text-[.3rem]'}
                                 key={timeIndex + 20}>
-                                {dayElement.weather.temp}&#8451;
+                                {temp}&#8451;
                               </text>
                               {/* ------------- */}
                               {/* PIN POINT */}
                               <circle
                                 cx={x2}
                                 cy={y2}
-                                r={0.5}
+                                r={0.75}
                                 key={timeIndex + 70}>
                                 <title>{dayElement.weather.description}</title>
                               </circle>
@@ -276,7 +294,7 @@ export default function Forecast() {
                               {/* TIME LABEL */}
                               <text
                                 x={x2 - 5}
-                                y={y + 5}
+                                y={y - 3}
                                 className={'text-[.2rem]'}>
                                 {time}
                               </text>{' '}
