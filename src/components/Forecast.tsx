@@ -51,9 +51,10 @@ export default function Forecast() {
   }, [dataFromContext]);
   const [x, y] = [100, 100];
   const midY = 75;
+  const lgStyles = 'lg:grid-rows-1 lg:grid-flow-col lg:divide-x-8';
   return (
     <div
-      className='grid grid-rows-1 grid-flow-col w-full place-items-center relative  divide-x-8'
+      className={`grid grid-cols-1 grid-flow-row w-full place-items-center relative divide-y-8 ${lgStyles}`}
       ref={parent}>
       {dataFromContext && (
         <>
@@ -67,6 +68,7 @@ export default function Forecast() {
 
               return (
                 <div key={dayIndex} className='h-[20rem] w-full relative '>
+                  {/* MAKE DATE VERTICAL ON MOBILE */}
                   {year} {month} {day}
                   <br />
                   <svg
