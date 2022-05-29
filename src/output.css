@@ -576,10 +576,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .justify-center {
   justify-content: center;
 }
-.divide-x > :not([hidden]) ~ :not([hidden]) {
+.divide-x-8 > :not([hidden]) ~ :not([hidden]) {
   --tw-divide-x-reverse: 0;
-  border-right-width: calc(1px * var(--tw-divide-x-reverse));
-  border-left-width: calc(1px * calc(1 - var(--tw-divide-x-reverse)));
+  border-right-width: calc(8px * var(--tw-divide-x-reverse));
+  border-left-width: calc(8px * calc(1 - var(--tw-divide-x-reverse)));
 }
 .rounded-lg {
   border-radius: 0.5rem;
@@ -850,14 +850,12 @@ input:focus-within ~ label {
   border-color: rgb(34 211 238 / var(--tw-border-opacity));
 }
 
-.hover\:divide-x-8:hover > :not([hidden]) ~ :not([hidden]) {
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(8px * var(--tw-divide-x-reverse));
-  border-left-width: calc(8px * calc(1 - var(--tw-divide-x-reverse)));
-}
-
 .hover\:bg-white\/25:hover {
   background-color: rgb(255 255 255 / 0.25);
+}
+
+.hover\:stroke-red-500:hover {
+  stroke: #ef4444;
 }
 
 .hover\:text-mainBlue:hover {

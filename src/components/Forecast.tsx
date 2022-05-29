@@ -50,6 +50,7 @@ export default function Forecast() {
     setDays(list);
   }, [dataFromContext]);
   const [x, y] = [100, 100];
+  const midY = 75;
   return (
     <div
       className='grid grid-rows-1 grid-flow-col w-full place-items-center relative  divide-x-8'
@@ -77,14 +78,14 @@ export default function Forecast() {
                       key={dayIndex + 60}
                       x1={0}
                       x2={x}
-                      y1={y / 2}
-                      y2={y / 2}
+                      y1={midY}
+                      y2={midY}
                       className='stroke-[.5] stroke-mainBlue'
                     />
                     {dayIndex === 0 && (
                       <text
                         x={0}
-                        y={y / 2 + 5}
+                        y={midY + 5}
                         className={'text-[.3rem]'}
                         key={88}>
                         0
@@ -101,47 +102,41 @@ export default function Forecast() {
                       const nextTemp = () => {
                         if (timeIndex + 1 < total) {
                           const t = timesArray[timeIndex + 1].weather.temp;
-                          console.log({ t });
                           return t;
                         } else if (dayIndex + 1 < daysArray.length) {
-                          const nextday = daysArray[dayIndex + 1];
-                          const curentday = daysArray[dayIndex];
-                          // MAY BE AN ISSUE IN THIS LOGIC
                           const t2 =
                             daysArray[dayIndex + 1].data[0].weather.temp;
-                          console.log({
-                            curentday,
-                            nextday,
-                          });
+
                           return t2;
                         } else {
                           return temp;
                         }
                       };
                       const time = dayElement.time.slice(0, -3);
-                      console.log({ time, temp, nextTemp: nextTemp() });
                       const divStep = x / (total + 1);
-                      const y1 = y / 2 - temp,
+                      const y1 = midY - temp,
                         x1 =
                           timeIndex === 0
                             ? divStep / 2
                             : timeIndex * divStep + divStep / 2,
-                        y2 = y / 2 - nextTemp(),
+                        y2 = midY - nextTemp(),
                         x2 =
                           timeIndex === 0
                             ? divStep + divStep / 2
                             : (timeIndex + 1) * divStep + divStep / 2;
                       const lastPreviousDayTemp = () => {
                         if (dayIndex - 1 >= 0) {
-                          const temp =
+                          const prevDayLastTemperature =
                             daysArray[dayIndex - 1].data.slice(-1)[0].weather
                               .temp;
-
-                          return temp;
-                        } else if (timeIndex - 1 >= 0) {
-                          return timesArray[timeIndex - 1].weather.temp;
+                          return prevDayLastTemperature;
+                        } else if (timeIndex - 1 > 0) {
+                          const prevTimeTemperature =
+                            timesArray[timeIndex - 1].weather.temp;
+                          return prevTimeTemperature;
                         } else {
-                          return y1 - 25;
+                          // if it's the first day and there's no previous temperature set to mid y value
+                          return midY - midY / 2;
                         }
                       };
 
@@ -151,7 +146,7 @@ export default function Forecast() {
                         } else if (dayIndex + 1 < daysArray.length) {
                           return daysArray[dayIndex + 1].data[0].weather.temp;
                         } else {
-                          return y1 - 25;
+                          return y1 - midY / 2;
                         }
                       };
 
@@ -168,12 +163,14 @@ export default function Forecast() {
                                 key={timeIndex + 60}
                                 x1={0}
                                 y1={
-                                  y / 2 -
+                                  midY -
                                   (temp + tempDiff(lastPreviousDayTemp(), temp))
                                 }
                                 x2={divStep / 2}
                                 y2={y1}
-                                className='stroke-mainOrange stroke-[.5]'
+                                className={`stroke-${
+                                  dayIndex === 0 ? 'gray-400/25' : 'mainOrange'
+                                } stroke-[.5]`}
                               />
                             </>
                           )}
@@ -245,7 +242,7 @@ export default function Forecast() {
                                 y1={y2}
                                 x2={x2 + divStep / 2}
                                 y2={
-                                  y / 2 -
+                                  midY -
                                   (temp + tempDiff(firstNextDayTemp(), temp))
                                 }
                                 className='stroke-mainOrange stroke-[.5]'
@@ -257,7 +254,7 @@ export default function Forecast() {
                                 y={y2 - 5}
                                 className={'text-[.3rem]'}
                                 key={timeIndex + 20}>
-                                {temp}&#8451;
+                                {nextTemp()}&#8451;
                               </text>
                               {/* ------------- */}
                               {/* PIN POINT */}
