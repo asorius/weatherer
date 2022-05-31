@@ -558,11 +558,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .appearance-none {
   appearance: none;
 }
-.grid-flow-col {
-  grid-auto-flow: column;
+.grid-flow-row {
+  grid-auto-flow: row;
 }
-.grid-rows-1 {
-  grid-template-rows: repeat(1, minmax(0, 1fr));
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 .place-content-center {
   place-content: center;
@@ -576,10 +576,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 .justify-center {
   justify-content: center;
 }
-.divide-x-8 > :not([hidden]) ~ :not([hidden]) {
-  --tw-divide-x-reverse: 0;
-  border-right-width: calc(8px * var(--tw-divide-x-reverse));
-  border-left-width: calc(8px * calc(1 - var(--tw-divide-x-reverse)));
+.divide-y-8 > :not([hidden]) ~ :not([hidden]) {
+  --tw-divide-y-reverse: 0;
+  border-top-width: calc(8px * calc(1 - var(--tw-divide-y-reverse)));
+  border-bottom-width: calc(8px * var(--tw-divide-y-reverse));
 }
 .rounded-lg {
   border-radius: 0.5rem;
@@ -876,6 +876,20 @@ input:focus-within ~ label {
 
   .lg\:w-full {
     width: 100%;
+  }
+
+  .lg\:grid-flow-col {
+    grid-auto-flow: column;
+  }
+
+  .lg\:grid-rows-1 {
+    grid-template-rows: repeat(1, minmax(0, 1fr));
+  }
+
+  .lg\:divide-x-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-x-reverse: 0;
+    border-right-width: calc(8px * var(--tw-divide-x-reverse));
+    border-left-width: calc(8px * calc(1 - var(--tw-divide-x-reverse)));
   }
 
   .lg\:text-8xl {

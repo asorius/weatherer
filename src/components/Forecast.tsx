@@ -1,5 +1,11 @@
 import React from 'react';
 import { Ctx } from '../context';
+import {
+  MainLine,
+  TemperatureLabel,
+  TimeAxis,
+  TimeLabel,
+} from './utils/SvgElements';
 interface WeatherData {
   main: string;
   description: string;
@@ -49,12 +55,13 @@ export default function Forecast() {
     });
     setDays(list);
   }, [dataFromContext]);
-  const [x, y] = [100, 100];
+  const [x, y] = [200, 100];
   const midY = 75;
-  const lgStyles = 'lg:grid-rows-1 lg:grid-flow-col lg:divide-x-8';
+  const lgStyles =
+    'lg:grid-rows-1 lg:grid-cols-auto lg:grid-flow-col lg:divide-x-8 lg:divide-y-0 lg:w-max-7xl ';
   return (
     <div
-      className={`grid grid-cols-1 grid-flow-row w-full place-items-center relative divide-y-8 ${lgStyles}`}
+      className={`pt-20 grid grid-cols-1 grid-flow-row w-full place-items-center relative divide-y-4 ${lgStyles}`}
       ref={parent}>
       {dataFromContext && (
         <>
@@ -67,17 +74,19 @@ export default function Forecast() {
               }
 
               return (
-                <div key={dayIndex} className='h-[20rem] w-full relative '>
-                  {/* MAKE DATE VERTICAL ON MOBILE */}
-                  {year} {month} {day}
-                  <br />
+                <div
+                  key={dayIndex + 10}
+                  className='h-[20rem] w-full max-w-lg relative text-center hover:scale-105 flex flex-col justify-center'>
+                  <span className='block m-2'>
+                    {year} {month} {day}
+                  </span>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     viewBox={`0 0 ${x} ${y}`}
-                    className='absolute top-0 left-0 h-full w-full'>
+                    className=' h-full w-full'>
                     {/* MAIN X AXIS  -----*/}
                     <line
-                      key={dayIndex + 60}
+                      key={dayIndex + 20}
                       x1={0}
                       x2={x}
                       y1={midY}
@@ -88,8 +97,8 @@ export default function Forecast() {
                       <text
                         x={0}
                         y={midY + 5}
-                        className={'text-[.3rem]'}
-                        key={88}>
+                        className={'text-[.4rem]'}
+                        key={dayIndex + 300}>
                         0
                       </text>
                     )}
@@ -160,144 +169,82 @@ export default function Forecast() {
                         <>
                           {/* FIRST CONNECTION LINE */}
                           {isFirstTime && (
-                            <>
-                              <line
-                                key={timeIndex + 60}
-                                x1={0}
-                                y1={
-                                  midY -
-                                  (temp + tempDiff(lastPreviousDayTemp(), temp))
-                                }
-                                x2={divStep / 2}
-                                y2={y1}
-                                className={`stroke-${
-                                  dayIndex === 0 ? 'gray-400/25' : 'mainOrange'
-                                } stroke-[.5]`}
-                              />
-                            </>
+                            <MainLine
+                              key={timeIndex + 30}
+                              x={0}
+                              y={
+                                midY -
+                                (temp + tempDiff(lastPreviousDayTemp(), temp))
+                              }
+                              x2={divStep / 2}
+                              y2={y1}
+                              color={
+                                dayIndex === 0 ? 'gray-400/25' : 'mainOrange'
+                              }></MainLine>
                           )}
                           {/* ------------ */}
-                          {/* MAIN GRAPH */}
-                          <line
-                            id=''
-                            key={timeIndex}
-                            x1={x1}
-                            y1={y1}
+                          <MainLine
+                            key={timeIndex + 40}
+                            x={x1}
+                            y={y1}
                             x2={x2}
                             y2={y2}
-                            className='stroke-mainOrange stroke-[.5]'>
-                            <title>Temperature graph</title>
-                          </line>
-                          {/* ------------ */}
-                          {/* TIME AXIS */}
-                          <line
-                            key={timeIndex + 200}
-                            x1={x1}
-                            y1={0}
+                            title={'Temperature Graph'}
+                          />
+                          <TimeAxis
+                            key={timeIndex + 50}
+                            x={x1}
+                            y={0}
                             x2={x1}
                             y2={y}
-                            className='stroke-[.5] stroke-gray-400/25'>
-                            <title>{time}</title>
-                          </line>
-                          <text x={x1 - 5} y={y - 3} className={'text-[.2rem]'}>
-                            {time}
-                          </text>{' '}
-                          {/* ------------ */}
-                          {/* TEMPERATURE LABEL */}
-                          <text
-                            x={x1 - 2}
-                            y={y1 - 5}
-                            className={'text-[.3rem]'}
-                            key={timeIndex + 20}>
-                            {temp}&#8451;
-                          </text>
-                          {/* ------------- */}
-                          {/* PIN POINT */}
-                          <circle
-                            cx={x1}
-                            cy={y1}
-                            r={0.75}
-                            className='m-4 hover:stroke-red-500'
-                            key={timeIndex + 70}>
-                            <title>{dayElement.weather.description}</title>
-                          </circle>
-                          <image
-                            x={x1 - 5}
+                            title={time}></TimeAxis>
+                          <TimeLabel
+                            x={x1}
+                            y={y}
+                            time={time}
+                            key={timeIndex + 60}></TimeLabel>
+
+                          <TemperatureLabel
+                            x={x1}
                             y={y1}
-                            width={8}
-                            height={8}
-                            href={
-                              'https://openweathermap.org/img/w/' +
-                              dayElement.weather.icon +
-                              '.png'
-                            }>
-                            <title>{dayElement.weather.description}</title>
-                          </image>
-                          {/* ------------ */}
+                            key={timeIndex + 70}
+                            temp={temp}
+                            description={dayElement.weather.description}
+                            icon={dayElement.weather.icon}
+                          />
                           {/* LAST TIME INDEX*/}
                           {!isLastDay && isLastTime && (
                             <>
-                              {/* LAST CONNECTION LINE */}
-                              <line
-                                key={timeIndex + 50}
-                                x1={x2}
-                                y1={y2}
+                              <MainLine
+                                key={timeIndex + 100}
+                                x={x2}
+                                y={y2}
                                 x2={x2 + divStep / 2}
                                 y2={
                                   midY -
                                   (temp + tempDiff(firstNextDayTemp(), temp))
                                 }
-                                className='stroke-mainOrange stroke-[.5]'
                               />
-                              {/* ------------ */}
-                              {/* TEMPERATURE LABEL */}
-                              <text
-                                x={x2 - 3}
-                                y={y2 - 5}
-                                className={'text-[.3rem]'}
-                                key={timeIndex + 20}>
-                                {nextTemp()}&#8451;
-                              </text>
-                              {/* ------------- */}
-                              {/* PIN POINT */}
-                              <circle
-                                cx={x2}
-                                cy={y2}
-                                r={0.75}
-                                key={timeIndex + 70}>
-                                <title>{dayElement.weather.description}</title>
-                              </circle>
-                              <image
-                                x={x2 - 5}
+                              <TemperatureLabel
+                                x={x2}
                                 y={y2}
-                                width={8}
-                                height={8}
-                                href={
-                                  'https://openweathermap.org/img/w/' +
-                                  dayElement.weather.icon +
-                                  '.png'
-                                }>
-                                <title>{dayElement.weather.description}</title>
-                              </image>
-                              {/* ------------ */}
-                              {/* TIME AXIS */}
-                              <line
-                                key={timeIndex + 200}
-                                x1={x2}
-                                y1={0}
-                                x2={x2}
-                                y2={y}
-                                className='stroke-[.5] stroke-gray-400/25'
+                                key={timeIndex + 110}
+                                temp={nextTemp()}
+                                description={dayElement.weather.description}
+                                icon={dayElement.weather.icon}
                               />
-                              {/* ------------ */}
-                              {/* TIME LABEL */}
-                              <text
-                                x={x2 - 5}
-                                y={y - 3}
-                                className={'text-[.2rem]'}>
-                                {time}
-                              </text>{' '}
-                              {/* ------------ */}
+                              <TimeAxis
+                                key={timeIndex + 130}
+                                x={x2}
+                                y={0}
+                                x2={x2}
+                                y2={y}></TimeAxis>
+
+                              <TimeLabel
+                                x={x2}
+                                y={y}
+                                time={time}
+                                key={timeIndex + 140}></TimeLabel>
                             </>
                           )}
                         </>
