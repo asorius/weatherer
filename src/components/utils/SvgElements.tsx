@@ -1,10 +1,8 @@
-import React from 'react';
 interface Props {
   x: number;
   y: number;
   x2?: number;
   y2?: number;
-  key: number;
   temp?: number;
   time?: string;
   description?: string;
@@ -12,43 +10,29 @@ interface Props {
   title?: string;
   color?: string;
 }
-const TemperatureLabel = ({ x, y, key, temp, description, icon }: Props) => {
+const TemperatureLabel = ({ x, y, temp, description, icon }: Props) => {
   return (
     <>
-      <text x={x - 3} y={y - 5} className={'text-[.6rem]'} key={key}>
-        {temp}&#8451;
+      <text x={x - 3} y={y - 5} className={'text-[.6rem]'}>
+        {temp}&#176;
       </text>
-      <circle
-        cx={x}
-        cy={y}
-        r={0.75}
-        className='m-4 hover:stroke-red-500'
-        key={key}>
+      <circle cx={x} cy={y} r={1.5} className='m-4 hover:stroke-red-500'>
         <title>{description}</title>
       </circle>
       <image
         x={x - 5}
         y={y}
-        width={8}
-        height={8}
+        width={15}
+        height={15}
         href={'https://openweathermap.org/img/w/' + icon + '.png'}>
         <title>{description}</title>
       </image>
     </>
   );
 };
-const MainLine = ({
-  x,
-  y,
-  x2,
-  y2,
-  key,
-  title,
-  color = 'mainOrange',
-}: Props) => {
+const MainLine = ({ x, y, x2, y2, title, color = 'mainOrange' }: Props) => {
   return (
     <line
-      key={key}
       x1={x}
       y1={y}
       x2={x2}
@@ -58,17 +42,16 @@ const MainLine = ({
     </line>
   );
 };
-const TimeLabel = ({ x, y, key, time }: Props) => {
+const TimeLabel = ({ x, y, time }: Props) => {
   return (
-    <text x={x - 5} y={y - 3} className={'text-[.4rem]'} key={key}>
+    <text x={x - 5} y={y - 3} className={'text-[.4rem]'}>
       {time}
     </text>
   );
 };
-const TimeAxis = ({ x, y, x2, y2, key, title }: Props) => {
+const TimeAxis = ({ x, y, x2, y2, title }: Props) => {
   return (
     <line
-      key={key}
       x1={x}
       y1={y}
       x2={x2}

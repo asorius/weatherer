@@ -61,22 +61,27 @@ export default function Forecast() {
     'lg:grid-rows-1 lg:grid-cols-auto lg:grid-flow-col lg:divide-x-8 lg:divide-y-0 lg:w-max-7xl ';
   return (
     <div
-      className={`pt-20 grid grid-cols-1 grid-flow-row w-full place-items-center relative divide-y-4 ${lgStyles}`}
+      className={`pt-20 grid grid-cols-1 grid-flow-row w-full place-items-center relative divide-y-4  ${lgStyles}`}
       ref={parent}>
       {dataFromContext && (
         <>
-          {daysWithTemps.flatMap(
+          {daysWithTemps.map(
             (dayObject: DayWeatherData, dayIndex: number, daysArray) => {
               const [year, month, day] = dayObject.date.split(':');
               const isLastDay = dayIndex + 1 === daysArray.length;
               if (isLastDay) {
-                return [];
+                return null;
               }
 
               return (
                 <div
-                  key={dayIndex + 10}
-                  className='h-[20rem] w-full max-w-lg relative text-center hover:scale-105 flex flex-col justify-center'>
+                  id={dayObject.date}
+                  key={dayObject.date}
+                  className={`h-[20rem] w-full max-w-lg relative text-center duration-300 hover:scale-105 flex flex-col justify-center  ${
+                    dayIndex === 0
+                      ? 'border-2 bg-mainOrange/10 rounded-md hover:border-mainOrange/5'
+                      : 'bg-mainBlue/10'
+                  }`}>
                   <span className='block m-2'>
                     {year} {month} {day}
                   </span>
@@ -170,7 +175,7 @@ export default function Forecast() {
                           {/* FIRST CONNECTION LINE */}
                           {isFirstTime && (
                             <MainLine
-                              key={timeIndex + 30}
+                              key={'startline' + dayIndex}
                               x={0}
                               y={
                                 midY -
@@ -178,13 +183,14 @@ export default function Forecast() {
                               }
                               x2={divStep / 2}
                               y2={y1}
+                              title={'Temperature Graph'}
                               color={
                                 dayIndex === 0 ? 'gray-400/25' : 'mainOrange'
                               }></MainLine>
                           )}
                           {/* ------------ */}
                           <MainLine
-                            key={timeIndex + 40}
+                            key={'mainline' + dayIndex}
                             x={x1}
                             y={y1}
                             x2={x2}
@@ -192,7 +198,7 @@ export default function Forecast() {
                             title={'Temperature Graph'}
                           />
                           <TimeAxis
-                            key={timeIndex + 50}
+                            key={'timeaxis' + dayIndex}
                             x={x1}
                             y={0}
                             x2={x1}
@@ -202,12 +208,12 @@ export default function Forecast() {
                             x={x1}
                             y={y}
                             time={time}
-                            key={timeIndex + 60}></TimeLabel>
+                            key={'timelabel' + dayIndex}></TimeLabel>
 
                           <TemperatureLabel
                             x={x1}
                             y={y1}
-                            key={timeIndex + 70}
+                            key={'templabel' + dayIndex}
                             temp={temp}
                             description={dayElement.weather.description}
                             icon={dayElement.weather.icon}
@@ -216,7 +222,7 @@ export default function Forecast() {
                           {!isLastDay && isLastTime && (
                             <>
                               <MainLine
-                                key={timeIndex + 100}
+                                key={'endline' + dayIndex}
                                 x={x2}
                                 y={y2}
                                 x2={x2 + divStep / 2}
@@ -228,13 +234,13 @@ export default function Forecast() {
                               <TemperatureLabel
                                 x={x2}
                                 y={y2}
-                                key={timeIndex + 110}
+                                key={'endtemplabel' + dayIndex}
                                 temp={nextTemp()}
                                 description={dayElement.weather.description}
                                 icon={dayElement.weather.icon}
                               />
                               <TimeAxis
-                                key={timeIndex + 130}
+                                key={'endtimeaxis' + dayIndex}
                                 x={x2}
                                 y={0}
                                 x2={x2}
@@ -244,7 +250,7 @@ export default function Forecast() {
                                 x={x2}
                                 y={y}
                                 time={time}
-                                key={timeIndex + 140}></TimeLabel>
+                                key={'endtimelabel' + dayIndex}></TimeLabel>
                             </>
                           )}
                         </>
