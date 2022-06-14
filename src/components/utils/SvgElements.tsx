@@ -37,7 +37,7 @@ const MainLine = ({ x, y, x2, y2, title, color = 'mainOrange' }: Props) => {
       y1={y}
       x2={x2}
       y2={y2}
-      className={`stroke-[.5] stroke-${color}`}>
+      className={`stroke-${color} stroke-[.5]`}>
       <title>{title}</title>
     </line>
   );

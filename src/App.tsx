@@ -3,21 +3,22 @@ import Current from './components/Current';
 import Forecast from './components/Forecast';
 import Form from './components/Form';
 import Header from './components/Header';
+import SlidingAnimationController from './components/SlidingAnimationController';
 
 import { WithContext } from './context';
 function App() {
   return (
     <WithContext>
-      <div className='bg-hero-svg h-screen w-screen bg-no-repeat bg-cover bg-center font-poppins'>
-        <div className='container mx-auto '>
-          <div id='this-shrinks-up'>
+      <div className='bg-hero-svg min-h-screen bg-no-repeat bg-cover bg-center font-poppins bg-fixed'>
+        <div className='flex flex-col h-full px-3'>
+          <SlidingAnimationController>
             <Header />
             <Form />
-          </div>
-          <div id='this-grows-in'>
+          </SlidingAnimationController>
+          <SlidingAnimationController body={true}>
             <Current />
             <Forecast />
-          </div>
+          </SlidingAnimationController>
         </div>
       </div>
     </WithContext>

@@ -77,12 +77,10 @@ export default function Forecast() {
                 <div
                   id={dayObject.date}
                   key={dayObject.date}
-                  className={`h-[20rem] w-full max-w-lg relative text-center duration-300 hover:scale-105 flex flex-col justify-center  ${
-                    dayIndex === 0
-                      ? 'border-2 bg-mainOrange/10 rounded-md hover:border-mainOrange/5'
-                      : 'bg-mainBlue/10'
+                  className={`h-[20rem] w-full max-w-lg relative text-center duration-300 hover:scale-105 flex flex-col justify-center bg-white/95 border-2 rounded-md  hover:border-slate-700/95   ${
+                    dayIndex === 0 && 'border-mainOrange/95'
                   }`}>
-                  <span className='block m-2'>
+                  <span className='block m-2 underline decoration-4 text-2xl pt-4'>
                     {year} {month} {day}
                   </span>
                   <svg
