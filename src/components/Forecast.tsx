@@ -57,11 +57,12 @@ export default function Forecast() {
   }, [dataFromContext]);
   const [x, y] = [200, 100];
   const midY = 75;
-  const lgStyles =
-    'lg:grid-rows-1 lg:grid-cols-auto lg:grid-flow-col lg:divide-x-8 lg:divide-y-0 lg:w-max-7xl ';
+  const lgStylesParent =
+    ' lg:grid-flow-col lg:auto-cols-fr lg:divide-x-8 lg:divide-y-0 lg:w-max-7xl lg:h-full lg:pt-0';
+  const lgStylesCard = 'lg:h-full ';
   return (
     <div
-      className={`pt-20 grid grid-cols-1 grid-flow-row w-full place-items-center relative divide-y-4  ${lgStyles}`}
+      className={`pt-20 grid grid-cols-1 grid-flow-row w-full place-items-center relative divide-y-4 ${lgStylesParent}`}
       ref={parent}>
       {dataFromContext && (
         <>
@@ -75,11 +76,12 @@ export default function Forecast() {
 
               return (
                 <div
-                  id={dayObject.date}
+                  id={'day-graph-card' + dayObject.date}
                   key={dayObject.date}
-                  className={`h-[20rem] w-full max-w-lg relative text-center duration-300 hover:scale-105 flex flex-col justify-center bg-white/95 border-2 rounded-md  hover:border-slate-700/95   ${
-                    dayIndex === 0 && 'border-mainOrange/95'
-                  }`}>
+                  // FIRST ITEM SHRINKED AND HALF BEHIND
+                  className={` h-[20rem] max-w-max relative text-center duration-300 hover:scale-105 lg:hover:scale-110 hover:z-20 flex flex-col justify-center bg-white/95 border-2 rounded-md  hover:border-slate-700/95   ${
+                    dayIndex === 0 && 'border-l-mainOrange/95'
+                  } ${lgStylesCard}`}>
                   <span className='block m-2 underline decoration-4 text-2xl pt-4'>
                     {year} {month} {day}
                   </span>
@@ -150,7 +152,7 @@ export default function Forecast() {
                           return prevTimeTemperature;
                         } else {
                           // if it's the first day and there's no previous temperature set to mid y value
-                          return midY - midY / 2;
+                          return midY / 2;
                         }
                       };
 
@@ -173,7 +175,7 @@ export default function Forecast() {
                           {/* FIRST CONNECTION LINE */}
                           {isFirstTime && (
                             <MainLine
-                              key={'startline' + dayIndex}
+                              key={'startline' + dayObject.date}
                               x={0}
                               y={
                                 midY -
@@ -187,8 +189,9 @@ export default function Forecast() {
                               }></MainLine>
                           )}
                           {/* ------------ */}
+                          {/* MAIN GRAPH ELEMENTS*/}
                           <MainLine
-                            key={'mainline' + dayIndex}
+                            key={'mainline' + dayObject.date}
                             x={x1}
                             y={y1}
                             x2={x2}
@@ -196,7 +199,7 @@ export default function Forecast() {
                             title={'Temperature Graph'}
                           />
                           <TimeAxis
-                            key={'timeaxis' + dayIndex}
+                            key={'timeaxis' + dayObject.date}
                             x={x1}
                             y={0}
                             x2={x1}
@@ -206,21 +209,22 @@ export default function Forecast() {
                             x={x1}
                             y={y}
                             time={time}
-                            key={'timelabel' + dayIndex}></TimeLabel>
+                            key={'timelabel' + dayObject.date}></TimeLabel>
 
                           <TemperatureLabel
                             x={x1}
                             y={y1}
-                            key={'templabel' + dayIndex}
+                            key={'templabel' + dayObject.date}
                             temp={temp}
                             description={dayElement.weather.description}
                             icon={dayElement.weather.icon}
                           />
+                          {/* ---------------- */}
                           {/* LAST TIME INDEX*/}
                           {!isLastDay && isLastTime && (
                             <>
                               <MainLine
-                                key={'endline' + dayIndex}
+                                key={'endline' + dayObject.date}
                                 x={x2}
                                 y={y2}
                                 x2={x2 + divStep / 2}
@@ -232,13 +236,13 @@ export default function Forecast() {
                               <TemperatureLabel
                                 x={x2}
                                 y={y2}
-                                key={'endtemplabel' + dayIndex}
+                                key={'endtemplabel' + dayObject.date}
                                 temp={nextTemp()}
                                 description={dayElement.weather.description}
                                 icon={dayElement.weather.icon}
                               />
                               <TimeAxis
-                                key={'endtimeaxis' + dayIndex}
+                                key={'endtimeaxis' + dayObject.date}
                                 x={x2}
                                 y={0}
                                 x2={x2}
@@ -248,7 +252,9 @@ export default function Forecast() {
                                 x={x2}
                                 y={y}
                                 time={time}
-                                key={'endtimelabel' + dayIndex}></TimeLabel>
+                                key={
+                                  'endtimelabel' + dayObject.date
+                                }></TimeLabel>
                             </>
                           )}
                         </>

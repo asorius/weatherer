@@ -10,7 +10,7 @@ function App() {
   return (
     <WithContext>
       <div className='bg-hero-svg min-h-screen bg-no-repeat bg-cover bg-center font-poppins bg-fixed'>
-        <div className='flex flex-col h-full px-3'>
+        <div className='flex flex-col h-full px-3 max-w-screen-2xl lg:mx-auto'>
           <SlidingAnimationController>
             <Header />
             <Form />

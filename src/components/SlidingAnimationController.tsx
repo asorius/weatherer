@@ -27,5 +27,23 @@ export default function SlidingAnimationController({
       return '';
     }
   };
-  return <div className={`duration-1000 ${animation()}`}>{children}</div>;
+  const loading = (
+    <div className='flex items-center justify-center w-full '>
+      <div className='w-24 h-24 border-l-2  rounded-full animate-spin border-mainBlue'></div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* {context?.state.loading && loading} */}
+
+      <div
+        className={`duration-1000 ${animation()} ${
+          body &&
+          'lg:grid lg:grid-flow-row lg:place-items-center lg:divide-y-8 lg:divide-transparent'
+        }`}>
+        {children}
+      </div>
+    </>
+  );
 }
