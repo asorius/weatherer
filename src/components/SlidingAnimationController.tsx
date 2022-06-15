@@ -35,8 +35,6 @@ export default function SlidingAnimationController({
 
   return (
     <>
-      {/* {context?.state.loading && loading} */}
-
       <div
         className={`duration-1000 ${animation()} ${
           body &&

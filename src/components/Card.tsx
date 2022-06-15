@@ -32,11 +32,16 @@ export default function Card({
         <p className='text-gray-700 text-6xl m-4 lg:my-0'>
           {Math.round(temp)} <span className='text-3xl'>&#8451;</span>
         </p>
-        <img
-          className=' inline-block h-20  transition duration-150 ease-in-out lg:h-30 '
-          src={imgUrl}
-          alt='Weather icon'
-        />
+        <div>
+          <img
+            className=' inline-block h-20 transition duration-150 ease-in-out lg:h-30 '
+            src={imgUrl}
+            alt='Weather icon'
+          />
+          <div className='px-6 text-gray-800 -mt-4  hidden lg:block'>
+            {weatherDescription}
+          </div>
+        </div>
       </div>
       <div className='py-3 px-6 border-t border-gray-300 text-gray-600 bg-white/90 lg:hidden'>
         {weatherDescription}
