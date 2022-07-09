@@ -50,7 +50,7 @@ export default function IterableUL({
         break;
     }
   };
-  const ul = React.useRef<HTMLUListElement | undefined>();
+  const ul = React.useRef<HTMLUListElement>(null);
   React.useEffect(() => {
     const focused = context?.state.inputFocus;
     focused ? ul.current?.focus() : ul.current?.blur();
