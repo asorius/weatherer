@@ -2,7 +2,7 @@ import React from 'react';
 
 interface PropTypes {
   city: string;
-  actionFn: (e: React.SyntheticEvent<HTMLOptionElement>) => void;
+  actionFn: (e: React.MouseEvent<HTMLLinkElement>) => void;
   isSelected: boolean;
 }
 export default function Option({
