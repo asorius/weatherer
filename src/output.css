@@ -448,6 +448,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .mb-2 {
   margin-bottom: 0.5rem;
 }
+.-mt-4 {
+  margin-top: -1rem;
+}
 .block {
   display: block;
 }
@@ -733,6 +736,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
 }
+.text-gray-800 {
+  --tw-text-opacity: 1;
+  color: rgb(31 41 55 / var(--tw-text-opacity));
+}
 .text-gray-600 {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity));
@@ -862,6 +869,10 @@ input:focus-within ~ label {
   border-color: rgb(34 211 238 / var(--tw-border-opacity));
 }
 
+.hover\:z-20:hover {
+  z-index: 20;
+}
+
 .hover\:scale-105:hover {
   --tw-scale-x: 1.05;
   --tw-scale-y: 1.05;
@@ -901,8 +912,25 @@ input:focus-within ~ label {
     margin-right: auto;
   }
 
+  .lg\:my-0 {
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+
+  .lg\:block {
+    display: block;
+  }
+
+  .lg\:flex {
+    display: flex;
+  }
+
   .lg\:grid {
     display: grid;
+  }
+
+  .lg\:hidden {
+    display: none;
   }
 
   .lg\:h-full {
@@ -913,12 +941,28 @@ input:focus-within ~ label {
     width: 100%;
   }
 
+  .lg\:max-w-none {
+    max-width: none;
+  }
+
+  .lg\:auto-cols-fr {
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
+  .lg\:grid-flow-row {
+    grid-auto-flow: row;
+  }
+
   .lg\:grid-flow-col {
     grid-auto-flow: column;
   }
 
   .lg\:place-items-center {
     place-items: center;
+  }
+
+  .lg\:items-center {
+    align-items: center;
   }
 
   .lg\:divide-x-8 > :not([hidden]) ~ :not([hidden]) {
@@ -933,6 +977,33 @@ input:focus-within ~ label {
     border-bottom-width: calc(0px * var(--tw-divide-y-reverse));
   }
 
+  .lg\:divide-y-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-divide-y-reverse: 0;
+    border-top-width: calc(8px * calc(1 - var(--tw-divide-y-reverse)));
+    border-bottom-width: calc(8px * var(--tw-divide-y-reverse));
+  }
+
+  .lg\:divide-transparent > :not([hidden]) ~ :not([hidden]) {
+    border-color: transparent;
+  }
+
+  .lg\:rounded-md {
+    border-radius: 0.375rem;
+  }
+
+  .lg\:border-none {
+    border-style: none;
+  }
+
+  .lg\:bg-mainOrange\/90 {
+    background-color: rgb(251 146 60 / 0.9);
+  }
+
+  .lg\:bg-mainBlue {
+    --tw-bg-opacity: 1;
+    background-color: rgb(34 211 238 / var(--tw-bg-opacity));
+  }
+
   .lg\:pt-0 {
     padding-top: 0px;
   }
@@ -940,5 +1011,11 @@ input:focus-within ~ label {
   .lg\:text-8xl {
     font-size: 6rem;
     line-height: 1;
+  }
+
+  .lg\:hover\:scale-110:hover {
+    --tw-scale-x: 1.1;
+    --tw-scale-y: 1.1;
+    transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
   }
 }

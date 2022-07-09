@@ -108,13 +108,24 @@ export default function Form() {
           setSuggestionList([]);
       }}
       className='grid place-content-center w-full'>
-      <div className='bg-white/90 rounded-lg py-6 px-16 max-w-5xl lg:w-full m-6 relative'>
+      <div className='bg-white/90 rounded-lg py-6 px-16 max-w-5xl lg:w-full m-6 relative z-[200]'>
         <Input updateFunction={updateFn} value={inputValue}></Input>
         <IterableUL
           list={suggestionList}
           submit={handleSubmit}
           listController={selectionController}></IterableUL>
       </div>
+      <div
+        className={`
+        transition duration-1000 w-full 
+      ${
+        suggestionList.length > 0
+          ? `max-h-[${suggestionList.length * 3}rem] h-[${
+              suggestionList.length * 3
+            }rem]`
+          : 'max-h-1'
+      } 
+      `}></div>
     </form>
   );
 }

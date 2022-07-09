@@ -38,6 +38,7 @@ export default function Input({
         className='block w-full appearance-none bg-transparent p-1 focus:outline-none'
         type='text'
         ref={input}
+        pattern='^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$'
         name='place'
         value={value}
         autoComplete='off'
