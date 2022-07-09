@@ -13,7 +13,7 @@ export default function IterableUL({
 }: Props) {
   const [currentOption, setOption] = React.useState(0);
   const context = React.useContext(Ctx);
-  const onKeyboardAction = (key: React.KeyboardEvent<HTMLInputElement>) => {
+  const onKeyboardAction = (key: React.KeyboardEvent<HTMLUListElement>) => {
     const selectedOptionManager = (actionType: number) => {
       const nextRawValue = currentOption + actionType;
       const nextValue =
