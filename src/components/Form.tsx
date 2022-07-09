@@ -77,7 +77,10 @@ export default function Form() {
           //test
           const response = await fetch(`/.netlify/keys`);
           const json = await response.json();
+          console.log('env is production');
           console.log(json);
+        } else {
+          console.log('env is development');
         }
 
         const responseCurrent = await fetch(

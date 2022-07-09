@@ -11,7 +11,6 @@ export default function SlidingAnimationController({
   const [toGrow, setToGrow] = React.useState(false);
   React.useEffect(() => {
     const data = context?.state.data;
-    console.log(data);
     if (data) {
       setToGrow(true);
     } else {

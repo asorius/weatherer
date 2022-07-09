@@ -86,7 +86,7 @@ export default function Forecast() {
                   return (
                     <div
                       id={'day-graph-card' + dayObject.date}
-                      key={dayObject.date}
+                      key={dayIndex + 30}
                       // FIRST ITEM SHRINKED AND HALF BEHIND
                       className={` h-[20rem] max-w-max relative text-center duration-300 hover:scale-105 lg:hover:scale-110 hover:z-20 flex flex-col justify-center bg-white/95 border-2 rounded-md  hover:border-slate-700/95  ${lgStylesCard}`}>
                       <span className='block m-2 underline decoration-4 text-2xl pt-4'>
