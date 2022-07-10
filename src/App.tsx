@@ -10,10 +10,14 @@ function App() {
   const test = async () => {
     if (process.env.NODE_ENV !== 'development') {
       //test
-      const response = await fetch(`/.netlify/functions/keys`);
-      const json = await response.json();
-      console.log('env is production');
-      console.log(json);
+      try {
+        const response = await fetch(`/.netlify/functions/keys`);
+        const json = await response.json();
+        console.log('env is production');
+        console.log(json);
+      } catch (e) {
+        console.log(e);
+      }
     } else {
       console.log('env is development');
     }

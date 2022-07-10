@@ -75,10 +75,14 @@ export default function Form() {
         const [lon, lat] = selected.coords;
         if (process.env.NODE_ENV !== 'development') {
           //test
-          const response = await fetch(`/.netlify/keys`);
-          const json = await response.json();
-          console.log('env is production');
-          console.log(json);
+          try {
+            const response = await fetch(`/.netlifyfunctions/keys`);
+            const json = await response.json();
+            console.log('env is production');
+            console.log(json);
+          } catch (e) {
+            console.log('error');
+          }
         } else {
           console.log('env is development');
         }
