@@ -8,7 +8,7 @@ interface Props {
   description?: string;
   icon?: string;
   title?: string;
-  color?: string;
+  color?: boolean;
 }
 const TemperatureLabel = ({ x, y, temp, description, icon }: Props) => {
   return (
@@ -30,14 +30,16 @@ const TemperatureLabel = ({ x, y, temp, description, icon }: Props) => {
     </>
   );
 };
-const MainLine = ({ x, y, x2, y2, title, color = 'mainOrange' }: Props) => {
+const MainLine = ({ x, y, x2, y2, title, color }: Props) => {
   return (
     <line
       x1={x}
       y1={y}
       x2={x2}
       y2={y2}
-      className={`stroke-${color} stroke-[.5]`}>
+      className={`${
+        color ? 'stroke-gray-400/25' : 'stroke-mainOrange'
+      } stroke-[.5]`}>
       <title>{title}</title>
     </line>
   );

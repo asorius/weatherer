@@ -12,6 +12,7 @@ function App() {
       //test
       try {
         const response = await fetch(`/.netlify/functions/keys`);
+        console.log({ response });
         const json = await response.json();
         console.log('env is production');
         console.log(json);

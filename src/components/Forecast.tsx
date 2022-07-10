@@ -196,9 +196,7 @@ export default function Forecast() {
                                     y2={y1}
                                     title={'Temperature Graph'}
                                     color={
-                                      dayIndex === 0
-                                        ? 'gray-400/25'
-                                        : 'mainOrange'
+                                      dayIndex === 0 ? true : false
                                     }></MainLine>
                                 )}
                                 {/* ------------ */}

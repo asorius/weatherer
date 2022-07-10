@@ -26,9 +26,11 @@ export default function Form() {
   const [inputValue, setInputValue] = React.useState('');
   const [suggestionList, setSuggestionList] = React.useState([]);
   const [selected, setSelected] = React.useState({ name: '', coords: [0, 0] });
-  const selectElement = React.createRef<HTMLSelectElement>();
+  const selectElement = React.useRef<HTMLSelectElement>();
   const context = useContext(Ctx);
-  React.useEffect(() => {
+
+  const updateFn = (currentTarget: HTMLInputElement) => {
+    setInputValue(currentTarget.value);
     const APICalls = async (
       target: string,
       locationKey = process.env.REACT_APP_MAPBOX_KEY
@@ -45,11 +47,7 @@ export default function Form() {
         return { error: true };
       }
     };
-    APICalls(inputValue);
-  }, [inputValue, suggestionList]);
-
-  const updateFn = (currentTarget: HTMLInputElement) => {
-    setInputValue(currentTarget.value);
+    APICalls(currentTarget.value);
   };
 
   const selectionController = (selectedObj?: {
@@ -67,6 +65,7 @@ export default function Form() {
       type: 'loading',
     });
     setInputValue('');
+    setSuggestionList([]);
     selectionController(selected);
 
     const weatherKey = process.env.REACT_APP_WEATHER_KEY;
@@ -77,6 +76,7 @@ export default function Form() {
           //test
           try {
             const response = await fetch(`/.netlifyfunctions/keys`);
+            console.log({ response });
             const json = await response.json();
             console.log('env is production');
             console.log(json);
@@ -108,7 +108,6 @@ export default function Form() {
       selected && weatherAPI(weatherKey);
     }, 500);
   };
-
   return (
     <form
       id='input-form'
