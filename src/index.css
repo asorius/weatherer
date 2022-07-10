@@ -1,7 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+html{
+  scroll-behavior: smooth;
+}
 input:focus-within ~ label,
 input:not(:placeholder-shown) ~ label {
   @apply transform scale-75 -translate-y-6;

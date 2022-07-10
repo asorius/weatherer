@@ -130,13 +130,11 @@ export default function Form() {
       </div>
       <div
         className={`
-        transition duration-1000 w-full 
+        w-full transition-all 
       ${
         suggestionList.length > 0
-          ? `max-h-[${suggestionList.length * 3}rem] h-[${
-              suggestionList.length * 3
-            }rem]`
-          : 'max-h-1'
+          ? `max-h-[20rem] h-[12rem] lg:h-[7rem]`
+          : 'max-h-1 h-0'
       } 
       `}></div>
     </form>

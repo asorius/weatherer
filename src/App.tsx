@@ -23,12 +23,28 @@ function App() {
       console.log('env is development');
     }
   };
+  const [toTop, showToTop] = React.useState(false);
   React.useEffect(() => {
     test();
+    const scrollHandler = () => {
+      const height = document.body.scrollHeight;
+      const scrolled = window.scrollY;
+      console.log({ height, scrolled });
+      if (height / scrolled < 5) {
+        showToTop(true);
+      } else {
+        showToTop(false);
+      }
+    };
+    window.addEventListener('scroll', scrollHandler);
+    return () => window.removeEventListener('scroll', scrollHandler);
   }, []);
+  console.log();
   return (
     <WithContext>
-      <div className='bg-hero-svg min-h-screen bg-no-repeat bg-cover bg-center font-poppins bg-fixed'>
+      <div
+        className='bg-hero-svg min-h-screen bg-no-repeat bg-cover bg-center font-poppins bg-fixed '
+        id='main'>
         <div className='flex flex-col h-full px-3 max-w-screen-2xl lg:mx-auto'>
           <SlidingAnimationController>
             <Header />
@@ -38,6 +54,25 @@ function App() {
             <Current />
             <Forecast />
           </SlidingAnimationController>
+        </div>
+        <div
+          className={`duration-300 ${
+            toTop ? 'opacity-100' : 'opacity-0'
+          } sticky bottom-[3%] left-[85%] bg-neutral-800/25 h-10 w-10 grid content-center z-[200] rounded-full`}>
+          <a href='#main'>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              className='h-5 w-5 mx-auto stroke-white'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth={2}>
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M5 10l7-7m0 0l7 7m-7-7v18'
+              />
+            </svg>
+          </a>
         </div>
       </div>
     </WithContext>
