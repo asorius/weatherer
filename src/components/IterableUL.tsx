@@ -71,7 +71,7 @@ export default function IterableUL({
           city={cityData.name}
           isSelected={i === currentOption}
           actionFn={(e) => {
-            // e.preventDefault();
+            e.preventDefault();
             selectionController(list[i]);
             submit();
           }}

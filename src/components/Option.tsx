@@ -2,7 +2,7 @@ import React from 'react';
 
 interface PropTypes {
   city: string;
-  actionFn: (e: React.MouseEventHandler<HTMLLinkElement | MouseEvent>) => void;
+  actionFn: React.MouseEventHandler<HTMLLinkElement>;
   isSelected: boolean;
 }
 export default function Option({
@@ -14,9 +14,7 @@ export default function Option({
     <li
       tabIndex={0}
       value={city}
-      onClick={(e: React.MouseEventHandler<HTMLLinkElement | MouseEvent>) =>
-        actionFn(e)
-      }
+      onClick={actionFn}
       role='presentation'
       className={`p-2 cursor-pointer hover:text-mainBlue hover:bg-white/25 ${
         isSelected && 'text-mainBlue bg-white/25'
