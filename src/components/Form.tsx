@@ -1,11 +1,11 @@
-import React, { KeyboardEvent, FormEvent, useContext } from 'react';
+import React, { FormEvent, useContext } from 'react';
 import { Ctx } from '../context/index';
 import Input from './Input';
 import IterableUL from './IterableUL';
-interface LocationData {
-  name: string;
-  coords: number[];
-}
+// interface LocationData {
+//   name: string;
+//   coords: number[];
+// }
 const locationAPI = async (target: string, key: string | undefined) => {
   try {
     const mapboxResponse = await fetch(
