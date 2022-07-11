@@ -58,7 +58,7 @@ export default function Forecast() {
   const [x, y] = [200, 100];
   const midY = 75;
   const lgStylesParent =
-    ' lg:grid-flow-col lg:auto-cols-fr lg:divide-x-8 lg:divide-y-0 lg:w-max-7xl lg:h-full lg:pt-0';
+    ' lg:grid-flow-col lg:auto-cols-fr lg:gap-x-1 lg:divide-y-0  lg:w-max-7xl lg:h-full lg:pt-0';
   const lgStylesCard = 'lg:h-full ';
   const loading = (
     <div className='flex items-center justify-center w-full '>
@@ -87,8 +87,7 @@ export default function Forecast() {
                     <div
                       id={'day-graph-card' + dayObject.date}
                       key={dayIndex + 30}
-                      // FIRST ITEM SHRINKED AND HALF BEHIND
-                      className={` h-[20rem] max-w-max relative text-center duration-300 hover:scale-105 hover:my-6 hover:lg:my-0 hover:lg:mx-2 lg:hover:scale-110 hover:z-20 flex flex-col justify-center bg-white/95 border-2 rounded-md  hover:border-slate-700/95  ${lgStylesCard}`}>
+                      className={` h-[20rem] max-w-max relative text-center duration-300 hover:scale-105 hover:my-6 hover:lg:my-0 hover:lg:mx-2 lg:hover:scale-110 hover:z-20 flex flex-col justify-center bg-white/95 hover:border-l-8 rounded-md  hover:border-l-slate-700/95  ${lgStylesCard}`}>
                       <span className='block m-2 underline decoration-4 text-2xl pt-4'>
                         {year} {month} {day}
                       </span>

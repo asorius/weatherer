@@ -417,6 +417,15 @@ Ensure the default browser behavior of the `hidden` attribute.
 .relative {
   position: relative;
 }
+.sticky {
+  position: sticky;
+}
+.bottom-\[3\%\] {
+  bottom: 3%;
+}
+.left-\[85\%\] {
+  left: 85%;
+}
 .bottom-full {
   bottom: 100%;
 }
@@ -443,6 +452,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 .m-6 {
   margin: 1.5rem;
+}
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
 }
 .my-4 {
   margin-top: 1rem;
@@ -472,6 +485,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-full {
   height: 100%;
 }
+.h-10 {
+  height: 2.5rem;
+}
+.h-5 {
+  height: 1.25rem;
+}
 .h-20 {
   height: 5rem;
 }
@@ -481,14 +500,29 @@ Ensure the default browser behavior of the `hidden` attribute.
 .h-\[20rem\] {
   height: 20rem;
 }
+.h-\[12rem\] {
+  height: 12rem;
+}
+.h-0 {
+  height: 0px;
+}
 .h-96 {
   height: 24rem;
+}
+.max-h-\[20rem\] {
+  max-height: 20rem;
 }
 .max-h-1 {
   max-height: 0.25rem;
 }
 .min-h-screen {
   min-height: 100vh;
+}
+.w-10 {
+  width: 2.5rem;
+}
+.w-5 {
+  width: 1.25rem;
 }
 .w-full {
   width: 100%;
@@ -556,6 +590,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .place-items-center {
   place-items: center;
 }
+.content-center {
+  align-content: center;
+}
 .items-center {
   align-items: center;
 }
@@ -567,11 +604,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   border-top-width: calc(4px * calc(1 - var(--tw-divide-y-reverse)));
   border-bottom-width: calc(4px * var(--tw-divide-y-reverse));
 }
-.rounded-lg {
-  border-radius: 0.5rem;
-}
 .rounded-full {
   border-radius: 9999px;
+}
+.rounded-lg {
+  border-radius: 0.5rem;
 }
 .rounded-md {
   border-radius: 0.375rem;
@@ -602,6 +639,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .border-slate-400 {
   --tw-border-opacity: 1;
   border-color: rgb(148 163 184 / var(--tw-border-opacity));
+}
+.bg-neutral-800\/25 {
+  background-color: rgb(38 38 38 / 0.25);
 }
 .bg-white\/90 {
   background-color: rgb(255 255 255 / 0.9);
@@ -652,11 +692,17 @@ Ensure the default browser behavior of the `hidden` attribute.
 .bg-no-repeat {
   background-repeat: no-repeat;
 }
+.stroke-white {
+  stroke: #fff;
+}
 .stroke-mainBlue {
   stroke: #22d3ee;
 }
 .stroke-gray-400\/25 {
   stroke: rgb(156 163 175 / 0.25);
+}
+.stroke-mainOrange {
+  stroke: #fb923c;
 }
 .stroke-\[\.5\] {
   stroke-width: .5;
@@ -767,6 +813,12 @@ Ensure the default browser behavior of the `hidden` attribute.
 .decoration-4 {
   text-decoration-thickness: 4px;
 }
+.opacity-100 {
+  opacity: 1;
+}
+.opacity-0 {
+  opacity: 0;
+}
 .shadow-lg {
   --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
@@ -788,17 +840,17 @@ Ensure the default browser behavior of the `hidden` attribute.
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
-.duration-150 {
-  transition-duration: 150ms;
-}
 .duration-300 {
   transition-duration: 300ms;
 }
-.duration-1000 {
-  transition-duration: 1000ms;
+.duration-150 {
+  transition-duration: 150ms;
 }
 .duration-700 {
   transition-duration: 700ms;
+}
+.duration-1000 {
+  transition-duration: 1000ms;
 }
 .ease-in-out {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -806,7 +858,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .ease-out {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
 }
-
+html{
+  scroll-behavior: smooth;
+}
 input:focus-within ~ label, input:not(:placeholder-shown) ~ label {
   --tw-translate-y: -1.5rem;
   --tw-scale-x: .75;
@@ -943,6 +997,10 @@ input:focus-within ~ label {
 
   .lg\:h-full {
     height: 100%;
+  }
+
+  .lg\:h-\[7rem\] {
+    height: 7rem;
   }
 
   .lg\:w-full {

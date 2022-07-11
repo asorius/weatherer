@@ -72,20 +72,6 @@ export default function Form() {
     const weatherAPI = async (key: string | undefined) => {
       try {
         const [lon, lat] = selected.coords;
-        if (process.env.NODE_ENV !== 'development') {
-          //test
-          try {
-            const response = await fetch(`/.netlifyfunctions/keys`);
-            console.log({ response });
-            const json = await response.json();
-            console.log('env is production');
-            console.log(json);
-          } catch (e) {
-            console.log('error');
-          }
-        } else {
-          console.log('env is development');
-        }
 
         const responseCurrent = await fetch(
           `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&APPID=${key}&units=metric`

@@ -7,29 +7,11 @@ import SlidingAnimationController from './components/SlidingAnimationController'
 
 import { WithContext } from './context';
 function App() {
-  const test = async () => {
-    if (process.env.NODE_ENV !== 'development') {
-      //test
-      try {
-        const response = await fetch(`/.netlify/functions/keys`);
-        console.log({ response });
-        const json = await response.json();
-        console.log('env is production');
-        console.log(json);
-      } catch (e) {
-        console.log(e);
-      }
-    } else {
-      console.log('env is development');
-    }
-  };
   const [toTop, showToTop] = React.useState(false);
   React.useEffect(() => {
-    test();
     const scrollHandler = () => {
       const height = document.body.scrollHeight;
       const scrolled = window.scrollY;
-      console.log({ height, scrolled });
       if (height / scrolled < 5) {
         showToTop(true);
       } else {
@@ -39,11 +21,10 @@ function App() {
     window.addEventListener('scroll', scrollHandler);
     return () => window.removeEventListener('scroll', scrollHandler);
   }, []);
-  console.log();
   return (
     <WithContext>
       <div
-        className='bg-hero-svg min-h-screen bg-no-repeat bg-cover bg-center font-poppins bg-fixed '
+        className='bg-hero-svg min-h-screen bg-no-repeat bg-cover bg-center font-poppins bg-fixed h-full'
         id='main'>
         <div className='flex flex-col h-full px-3 max-w-screen-2xl lg:mx-auto'>
           <SlidingAnimationController>
