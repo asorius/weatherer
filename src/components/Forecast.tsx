@@ -77,7 +77,13 @@ export default function Forecast() {
             <>
               {daysWithTemps.map(
                 (dayObject: DayWeatherData, dayIndex: number, daysArray) => {
-                  const [year, month, day] = dayObject.date.split(':');
+                  const [year, month, day] = dayObject.date.split('-');
+                  const [weekday, monthname] = new Date(
+                    `${year}-${month}-${day}`
+                  )
+                    .toString()
+                    .split(' ')
+                    .splice(0, 2);
                   const isLastDay = dayIndex + 1 === daysArray.length;
                   if (isLastDay) {
                     return null;
@@ -89,7 +95,7 @@ export default function Forecast() {
                       key={dayIndex + 30}
                       className={` h-[20rem] max-w-max relative text-center duration-300 hover:scale-105 hover:my-6 hover:lg:my-0 hover:lg:mx-2 lg:hover:scale-110 hover:z-20 flex flex-col justify-center bg-white/95 hover:border-l-8 rounded-md  hover:border-l-slate-700/95  ${lgStylesCard}`}>
                       <span className='block m-2 underline decoration-4 text-2xl pt-4'>
-                        {year} {month} {day}
+                        {weekday}, {day} {monthname}
                       </span>
                       <svg
                         xmlns='http://www.w3.org/2000/svg'
